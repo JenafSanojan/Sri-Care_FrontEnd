@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/special/bill_tile.dart';
 import '../../widget_common/special/circular_usage_indicator.dart';
+import 'package:get/get.dart';
+
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -126,7 +130,7 @@ class MobileDashboard extends StatelessWidget {
                     children: [
                       const Text("Recent Bills", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColorOne)),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () => Get.to(() => BillingHistoryScreen()),
                           child: const Text("See All", style: TextStyle(color: orangeColor))
                       ),
                     ],
@@ -270,7 +274,7 @@ class WebDashboard extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                           ),
-                          onPressed: () {},
+                          onPressed: () => Get.to(() => BillingHistoryScreen()),
                           child: const Text("View All History", style: TextStyle(color: white))
                       ),
                     ],
