@@ -66,7 +66,35 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     // LayoutBuilder helps us respond to the parent widget's size
     return ResponsiveLayout(
-      mobileBody:  Scaffold(
+      mobileBody: Scaffold(
+        body: _mobWidgetOptions
+            .elementAt(_selectedIndex), // Main content area
+        bottomNavigationBar: BottomNavigationBar(
+          items: _mobMenuItems.map((item) {
+            return BottomNavigationBarItem(
+              icon: Icon(item.icon),
+              label: '',
+            );
+          }).toList(),
+          currentIndex: _selectedIndex, // Current selected item
+          backgroundColor:
+          Colors.blueGrey[900], // Background color for the bar
+          selectedItemColor: darkGreen, // Color for selected icon
+          unselectedItemColor: Colors.grey, // Color for unselected icons
+          onTap: _onItemTapped, // Callback when an item is tapped
+          type: BottomNavigationBarType
+              .fixed, // Ensures all items are visible
+          // Hide labels for both selected and unselected items
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          // show a circle around the selected icon
+          selectedIconTheme: IconThemeData(
+            size: 30, // Size of the selected icon
+            color: darkGreen, // Color of the selected icon
+          ),
+        ),
+      ),
+      webBody:  Scaffold(
         body: Row(
           children: <Widget>[
             // Sidebar Container wrapped in MouseRegion for hover detection
@@ -136,34 +164,6 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      webBody: Scaffold(
-          body: _mobWidgetOptions
-              .elementAt(_selectedIndex), // Main content area
-          bottomNavigationBar: BottomNavigationBar(
-            items: _mobMenuItems.map((item) {
-              return BottomNavigationBarItem(
-                icon: Icon(item.icon),
-                label: '',
-              );
-            }).toList(),
-            currentIndex: _selectedIndex, // Current selected item
-            backgroundColor:
-                Colors.blueGrey[900], // Background color for the bar
-            selectedItemColor: darkGreen, // Color for selected icon
-            unselectedItemColor: Colors.grey, // Color for unselected icons
-            onTap: _onItemTapped, // Callback when an item is tapped
-            type: BottomNavigationBarType
-                .fixed, // Ensures all items are visible
-            // Hide labels for both selected and unselected items
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            // show a circle around the selected icon
-            selectedIconTheme: IconThemeData(
-              size: 30, // Size of the selected icon
-              color: darkGreen, // Color of the selected icon
-            ),
-          ),
-        ),
     );
   }
 }
