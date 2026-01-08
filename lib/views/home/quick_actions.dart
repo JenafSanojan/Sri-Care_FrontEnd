@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sri_tel_flutter_web_mob/views/category/category_add_screen.dart';
 
 class QuickActionsScreen extends StatelessWidget {
   const QuickActionsScreen({super.key});
@@ -18,8 +17,8 @@ class QuickActionsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () => showAddCategoryPopup(context),
-              child: const Text('Add Category'),
+              onPressed: () => {},
+              child: const Text('Do Nothing'),
             ),
           ],
         ),

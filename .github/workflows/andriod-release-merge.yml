@@ -5,6 +5,9 @@ on:
     branches:
       - To_Android
 
+permissions:
+  contents: write
+
 jobs:
   build_apk:
     runs-on: ubuntu-latest
