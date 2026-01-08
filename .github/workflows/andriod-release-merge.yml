@@ -1,0 +1,33 @@
+name: Build APK and Release on merge
+
+on:
+  push:
+    branches:
+      - To_Android
+
+jobs:
+  build_apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK to GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: build/app/outputs/flutter-apk/app-release.apk
+          tag: ${{ github.ref_name }}-release
+          generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
