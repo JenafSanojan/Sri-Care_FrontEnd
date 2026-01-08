@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:sri_tel_flutter_web_mob/utils/colors.dart';
-import 'package:sri_tel_flutter_web_mob/views/category/category_view_screen.dart';
-import 'package:sri_tel_flutter_web_mob/views/home/home_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/home/dashboard.dart';
 
 import '../../entities/common.dart';
 
@@ -23,17 +21,13 @@ class _MainScreenState extends State<MainScreen> {
 
   // List of destinations/pages for the menu
   static const List<Widget> _webWidgetOptions = <Widget>[
-    Center(child: HomePage()),
-    Center(
-        child: CategoryViewScreen(
-      canGoBack: false,
-    )),
+    Center(child: DashboardScreen()),
     Center(child: Text('Settings Page', style: TextStyle(fontSize: 24))),
     Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
     Center(child: Text('About Page', style: TextStyle(fontSize: 24))),
   ];
   static const List<Widget> _mobWidgetOptions = <Widget>[
-    Center(child: HomePage()),
+    Center(child: DashboardScreen()),
     Center(child: Text('Settings Page', style: TextStyle(fontSize: 24))),
     Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
     Center(child: Text('About Page', style: TextStyle(fontSize: 24))),

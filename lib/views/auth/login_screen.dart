@@ -70,19 +70,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const SizedBox(height: 60),
                         // Login text.....................................................
-                        const Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 28),
-                            child: Text(
-                              AppConstants.login,
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0),
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
+                        // const Align(
+                        //   alignment: Alignment.bottomLeft,
+                        //   child: Padding(
+                        //     padding: EdgeInsets.symmetric(horizontal: 28),
+                        //     child: Text(
+                        //       AppConstants.login,
+                        //       style: TextStyle(
+                        //           color: Color.fromARGB(255, 0, 0, 0),
+                        //           fontSize: 28,
+                        //           fontWeight: FontWeight.bold),
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 20),
                         // Social Media Login Buttons ....................................
                         Row(
@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   });
                                 }
                               },
-                              title: '  ' + AppConstants.google + '  ',
+                              title: AppConstants.google,
                               txtColor: socoalmedia_btn_textcolor,
                               imagePath: "assets/images/google.png",
                             ),
@@ -333,11 +333,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                     ],
                   )
-                ),
-                // Decorative Left Panel
+                ), // Decorative Left Panel
                 Expanded(
                   child: SizedBox(
-                    width: 400,
+                    width: 600,
                     height: Get.height,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -347,20 +346,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             children: [
                               const SizedBox(height: 60),
-                              // Login text.....................................................
-                              const Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 28),
-                                  child: Text(
-                                    AppConstants.login,
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
+                              // // Login text.....................................................
+                              // const Align(
+                              //   alignment: Alignment.bottomLeft,
+                              //   child: Padding(
+                              //     padding: EdgeInsets.symmetric(horizontal: 28),
+                              //     child: Text(
+                              //       AppConstants.login,
+                              //       style: TextStyle(
+                              //           color: Color.fromARGB(255, 0, 0, 0),
+                              //           fontSize: 28,
+                              //           fontWeight: FontWeight.bold),
+                              //     ),
+                              //   ),
+                              // ),
                               const SizedBox(height: 20),
                               // Social Media Login Buttons ....................................
                               Row(
@@ -409,7 +408,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         });
                                       }
                                     },
-                                    title: '  ' + AppConstants.google + '  ',
+                                    title: AppConstants.google,
                                     txtColor: socoalmedia_btn_textcolor,
                                     imagePath: "assets/images/google.png",
                                   ),
