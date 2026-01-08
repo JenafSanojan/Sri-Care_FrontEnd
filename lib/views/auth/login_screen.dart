@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    GetStorage().erase(); // for safety (erase company selection)
+    GetStorage().erase(); // for safety (erase company selection_popup.dart)
   }
 
   @override
