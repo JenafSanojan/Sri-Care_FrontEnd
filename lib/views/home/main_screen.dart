@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/utils/colors.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/about_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/settings.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/dashboard.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
+import 'package:get/get.dart';
 
-import '../../entities/common.dart';
+import '../../controllers/auth_controller.dart';
+import '../../entities/ui_entities.dart';
 import '../actions/packages_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,11 +21,11 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final controller = Get.put(AuthController());
+
   int _selectedIndex = 0; // Tracks the currently selected menu item
   bool _isSidebarHovered = false; // New state to track sidebar hover
   bool _isSidebarOpen = false; // New state to track sidebar open/close
-
-  // final authController = Get.put(AuthController());
 
   // List of destinations/pages for the menu
   static final List<Widget> _webWidgetOptions = <Widget>[
@@ -63,8 +66,21 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Schedule the check to run AFTER the first frame is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(GlobalAuthData.isInitialized == false) {
+        print("global auth not initialized, re verifying login");
+        controller.reVerifyLogin();
+      } else {
+        print("global auth already initialized");
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // LayoutBuilder helps us respond to the parent widget's size
     return ResponsiveLayout(
       mobileBody: Scaffold(
         body: _mobWidgetOptions

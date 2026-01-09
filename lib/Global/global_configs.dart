@@ -1,29 +1,27 @@
+import 'package:sri_tel_flutter_web_mob/entities/user.dart';
+
 class GlobalAuthData {
     static final GlobalAuthData _instance = GlobalAuthData._internal();
 
-    late String userId;
-    late String userName;
-
+    // private fields
+    late User _user;
     static bool _initialized = false;
 
     static bool get isInitialized => _initialized;
+    User get user => _user;
 
-    factory GlobalAuthData.initialize(String userId, String userName, String companyId) {
+    factory GlobalAuthData.initialize(User user) {
         if (_initialized) {
             throw Exception("GlobalAuthData has already been initialized");
         }
-        _instance._init(userId, userName, companyId);
+        _instance._init(user);
         _initialized = true;
         return _instance;
     }
-
     GlobalAuthData._internal();
-
-    void _init(String userId, String userName, String companyId) {
-        this.userId = userId;
-        this.userName = userName;
+    void _init(User user) {
+        _user = user;
     }
-
     static GlobalAuthData get instance {
         if (!_initialized) {
             throw Exception("GlobalAuthData is not initialized");
@@ -33,22 +31,23 @@ class GlobalAuthData {
 }
 
 class NetworkConfigs {
-    static const bool isDevMode = false;
-    static const String apiLiveUrl = "http://localhost:5000";
-    static const String apiLocalUrl = "https://api-gateway-ysfa.onrender.com";
+    static const bool isDevMode = true;
+    static const String apiLocalUrl = "http://localhost:5000";
+    static const String apiLiveUrl = "https://api-gateway-ysfa.onrender.com";
     static const int timeoutDuration = 30;
 
-    static const Map<String, String> defaultHeaders = {
+    static final Map<String, String> defaultHeaders = {
         "Content-Type": "application/json",
         "Accept": "application/json",
+        "Authorization": GlobalAuthData.isInitialized ? "Bearer ${GlobalAuthData.instance._user.token}" : "",
     };
 
     static String getBaseUrl() {
         if(isDevMode) {
-          return apiLiveUrl;
+          return apiLocalUrl;
         }
         else {
-          return apiLocalUrl;
+          return apiLiveUrl;
         }
   }
 }
