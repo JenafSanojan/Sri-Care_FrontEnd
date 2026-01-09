@@ -1,11 +1,7 @@
 
 class AppConstants{
-
-
-
-
 // login page and SignUp page texts .......................................
-  static const String login = "Log In";
+  static const String login = "Sign In";
   static const String selectCom = "Select Company";
   static const String continueSelectCom = "Continue";
   static const String signup = "Sign Up";
@@ -39,7 +35,7 @@ class AppConstants{
 
 
   // reset password screens ................................................
-  static const String enteryour = "Enter Your Email And We Will Send You A OTP Code To Reset Your Password";
+  static const String enterEmailToReset = "Enter Your Email And We Will Send You Link To Reset Your Password";
   static const String emailphone = "E-Mail Address";
   static const String enterverificationcode1 = "Enter Verification ";
   static const String enterverificationcode2 = "Code";

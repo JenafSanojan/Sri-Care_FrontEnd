@@ -28,12 +28,18 @@ class MobileDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: lightYellow,
+      appBar: AppBar(
+        title: const Text("Sri Care", style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+        backgroundColor: orangeColor,
+        centerTitle: true,
+      ),
+
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Top Header Section with Gradient
             Container(
-              padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 30),
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 30),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [orangeColor, textLightGreenColor],
@@ -110,8 +116,8 @@ class MobileDashboard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          buildCircularIndicator("Voice", "200", "Mins", 0.4),
-                          buildCircularIndicator("Data", "45.6", "GB", 0.7),
+                          buildCircularIndicator(title: "Voice",value: "200",unit: "Mins",percent: 0.4),
+                          buildCircularIndicator(title: "Data",value: "45.6",unit: "GB",percent: 0.7),
                         ],
                       ),
                     ],
@@ -157,7 +163,6 @@ class WebDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: lightYellow,
-      // Removed AppBar side/bottom nav as requested
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(40),
         child: Column(
@@ -227,9 +232,9 @@ class WebDashboard extends StatelessWidget {
                         const Spacer(),
                         // Using the shared helper with larger dimensions if needed,
                         // but standard size works well centered
-                        buildCircularIndicator("", "200", "Mins", 0.4),
+                        buildCircularIndicator(title: "", value: "200",unit:  "Mins", percent: 0.4, height: 80, width: 80),
                         const Spacer(),
-                        const Text("450 Mins Left", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColorOne)),
+                        const Text("450 Mins Left", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: textColorOne)),
                       ],
                     ),
                   ),
@@ -245,9 +250,9 @@ class WebDashboard extends StatelessWidget {
                       children: [
                         const Text("Data Usage", style: TextStyle(fontSize: 18, color: greyColor)),
                         const Spacer(),
-                        buildCircularIndicator("", "45.6", "GB", 0.7),
+                        buildCircularIndicator(title: "",value: "45.6",unit: "GB",percent: 0.7, width: 80, height: 80),
                         const Spacer(),
-                        const Text("12.5 GB Left", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColorOne)),
+                        const Text("12.5 GB Left", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: textColorOne)),
                       ],
                     ),
                   ),

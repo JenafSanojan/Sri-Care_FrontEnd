@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../controllers/auth_controller.dart';
 import '../../entities/popup_item.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/pop_up_screens/selection_popup.dart';
+import 'package:get/get.dart';
+
+import '../auth/change_password_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -12,6 +16,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final controller = Get.put(AuthController());
+
   // State variables for toggles
   bool _isDarkMode = false;
   bool _notificationsEnabled = true;
@@ -40,6 +46,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  void _logout() {
+    controller.logout();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,28 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // --- Section 1: Account ---
-            _buildSectionHeader("General"),
-            _buildSettingsTile(
-              icon: Icons.person_outline,
-              title: "Account Settings",
-              subtitle: "Manage profile & security",
-              onTap: () {
-                // Route to user profile page
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Routing to Profile...")));
-              },
-            ),
-            _buildSettingsTile(
-              icon: Icons.language,
-              title: "Language",
-              subtitle: _currentLanguage, // Shows currently selected language
-              onTap: _changeLanguage, // Triggers the popup
-            ),
-
-            const SizedBox(height: 25),
-
-            // --- Section 2: App Preferences ---
+            // --- Section 1: App Preferences ---
             _buildSectionHeader("Preferences"),
 
             // Custom Switch Tile for Theme
@@ -126,6 +115,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 },
               ),
             ),
+
+            const SizedBox(height: 25),
+
+            // --- Section 2: Account ---
+            _buildSectionHeader("General"),
+            _buildSettingsTile(
+              icon: Icons.person_outline,
+              title: "Account Settings",
+              subtitle: "Manage profile & security",
+              onTap: () {
+                // Route to user profile page
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Routing to Profile...")));
+              },
+            ),
+            _buildSettingsTile(
+              icon: Icons.language,
+              title: "Language",
+              subtitle: _currentLanguage, // Shows currently selected language
+              onTap: _changeLanguage, // Triggers the popup
+            ),
+            _buildSettingsTile(
+              icon: Icons.password,
+              title: "Change Password",
+              subtitle: "Change your account password",
+              onTap: () => Get.to(() => const ChangePasswordScreen()),
+              tileColor: orangeColor
+            ),
+            _buildSettingsTile(
+              icon: Icons.logout,
+              title: "Logout",
+              subtitle: "Logout from this device",
+              onTap: _logout,
+              tileColor: orangeColor
+            ),
           ],
         ),
       ),
@@ -157,11 +181,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     required String title,
     required String subtitle,
     required VoidCallback onTap,
+    Color tileColor = white,
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
-        color: white,
+        color: tileColor,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(

@@ -3,7 +3,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sri_tel_flutter_web_mob/entities/common.dart';
+import 'package:sri_tel_flutter_web_mob/entities/ui_entities.dart';
 
 import '../utils/colors.dart';
 
