@@ -32,7 +32,7 @@ class PackagesScreen extends StatelessWidget {
         backgroundColor: lightYellow,
         appBar: AppBar(
           backgroundColor: orangeColor,
-          title: const Text("Packages", style: TextStyle(color: white)),
+          title: const Text("Packages", style: TextStyle(color: white, fontWeight: FontWeight.w700)),
           elevation: 0,
           leading: const Icon(Icons.menu, color: white),
           actions: [
@@ -48,10 +48,9 @@ class PackagesScreen extends StatelessWidget {
           ],
         ),
       ),
-      // Simple Web Layout Reuse
       webBody: Scaffold(
         backgroundColor: lightYellow,
-        appBar: AppBar(title: const Text("Packages Web", style: TextStyle(color: white)), backgroundColor: orangeColor),
+        appBar: AppBar(title: Text("Packages", style: TextStyle(color: white, fontWeight: FontWeight.w700)), backgroundColor: orangeColor, centerTitle: true,),
         body: Center(
           child: Container(
             width: 800, // Constrain width for web

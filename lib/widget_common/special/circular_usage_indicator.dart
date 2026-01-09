@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../utils/colors.dart';
 
-Widget buildCircularIndicator(String title, String value, String unit, double percent) {
+Widget buildCircularIndicator(
+    {required String title,
+    required String value,
+    required String unit,
+    required double percent,
+    double? height,
+    double? width}) {
   return Column(
     children: [
       SizedBox(
-        height: 110,
-        width: 110,
+        height: height ?? 110,
+        width: width ?? 110,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -36,8 +42,12 @@ Widget buildCircularIndicator(String title, String value, String unit, double pe
           ],
         ),
       ),
-      const SizedBox(height: 10),
-      Text(title, style: const TextStyle(fontWeight: FontWeight.w600, color: textColorOne)),
+      if(title.isNotEmpty) ...{
+        const SizedBox(height: 10),
+        Text(title,
+            style: const TextStyle(
+                fontWeight: FontWeight.w600, color: textColorOne)),
+      }
     ],
   );
 }

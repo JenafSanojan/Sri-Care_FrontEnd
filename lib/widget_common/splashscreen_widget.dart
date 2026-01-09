@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sri_tel_flutter_web_mob/utils/colors.dart';
 import 'splashscreenlogo_widget.dart';
 
 class SplashScreenWidget extends StatelessWidget {
@@ -8,28 +9,21 @@ class SplashScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       //...............................................
       width: Get.width,
       height: Get.height,
 
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/background.png"),
-          fit: BoxFit.cover,
-        )
+        color: Colors.white,
       ),
 
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        
-        //main logo .............................................
-        LogoWidget(),
-        
-      ],
-    ),
-      
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //main logo .............................................
+          LogoWidget(),
+        ],
+      ),
     );
   }
 }

@@ -5,7 +5,7 @@ Widget LogoWidget() {
     child: Padding(
       padding: const EdgeInsets.all(48.0),
       child: Image.asset(
-        "assets/images/Logo.png",
+        "assets/images/Logo_Only.png",
         fit: BoxFit.cover,
       ),
     ),

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-// import 'package:sri_tel_flutter_web_mob/views/delivety_detail_screens/DeliveryDetailsScreen.dart';
-// import 'package:sri_tel_flutter_web_mob/views/reset_password_screens/otp_verification_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/custom_password_field_widget.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/footer_credit_copyright_text.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/loading_widgets/loading_widget.dart';
-import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
 
-// import '../../services/api_services/firebase_service.dart';
+import '../../controllers/auth_controller.dart';
 import '../../utils/colors.dart';
 import '../../utils/string.dart';
 import '../../widget_common/custom_button_widget.dart';
 import '../../widget_common/custom_textwidget.dart';
-import '../../widget_common/login_signup_bg_screen.dart';
+import '../../widget_common/snack_bar.dart';
 import '../../widget_common/social_media_button_widget.dart';
 import 'login_screen.dart';
 
@@ -26,13 +23,16 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool isObscure1 = true;
-  void toggleObscure1(){
+
+  void toggleObscure1() {
     setState(() {
       isObscure1 = !isObscure1;
     });
   }
+
   bool isObscure2 = true;
-  void toggleObscure2(){
+
+  void toggleObscure2() {
     setState(() {
       isObscure2 = !isObscure2;
     });
@@ -40,58 +40,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool isShowLoadingWidget = false;
 
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController emailOrPhoneNumberController = TextEditingController();
-  final TextEditingController secondaryNumber = TextEditingController();
+  final TextEditingController displayNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileNumber = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordRetypeController = TextEditingController();
+  final TextEditingController passwordRetypeController =
+      TextEditingController();
 
-  // final controller = Get.put(AuthController());
+  final controller = Get.put(AuthController());
 
-
-  // Future<void> signUp() async {
-  //   setState(() {
-  //     isShowLoadingWidget = true;
-  //   });
-  //   if(
-  //   fullNameController.text.isNotEmpty &&
-  //       emailOrPhoneNumberController.text.isNotEmpty &&
-  //       passwordController.text.isNotEmpty &&
-  //       secondaryNumber.text.isNotEmpty
-  //   ){
-  //     if(passwordController.text.toString() == passwordRetypeController.text.toString()){
-  //       // print("Signup started");
-  //       String? userId = await controller.signUp(
-  //           firstName: fullNameController.text,
-  //           email: emailOrPhoneNumberController.text,
-  //           password: passwordController.text,
-  //           secondaryNumber: secondaryNumber.text,
-  //           profilePhoto: '',
-  //           isSocialMedia: false
-  //       );
-  //
-  //       if (userId != null && userId.isNotEmpty) {
-  //         print("Signup successful");
-  //         CommonLoaders.successSnackBar(
-  //           title: "Success",
-  //           duration: 3,
-  //           message: "Sign up successful. Please login to continue.",
-  //         );
-  //         Get.offAll(() => LoginScreen());
-  //       } else {
-  //         print("Signup failed");
-  //         CommonLoaders.errorSnackBar(
-  //           title: "Error",
-  //           duration: 3,
-  //           message: "Sign up failed. Please try again.",
-  //         );
-  //       }
-  //     }
-  //   }
-  //   setState(() {
-  //     isShowLoadingWidget = false;
-  //   });
-  // }
+  void _signUp() async {
+    if (mounted) {
+      setState(() {
+        isShowLoadingWidget = true;
+      });
+    }
+    if (displayNameController.text.isNotEmpty &&
+        emailController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        mobileNumber.text.isNotEmpty) {
+      if (passwordController.text.toString() ==
+          passwordRetypeController.text.toString()) {
+        // print("Signup started");
+        await controller.signUp(
+            email: emailController.text,
+            password: passwordController.text,
+            displayName: displayNameController.text,
+            mobileNumber: mobileNumber.text,
+            profilePhoto: '',
+            isSocialMedia: false);
+      }
+    }
+    if (mounted) {
+      setState(() {
+        isShowLoadingWidget = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             height: 30,
                           ),
 
-                          // Login text.....................................................
+                          // Signup text.....................................................
 
                           const Align(
                             alignment: Alignment.bottomLeft,
@@ -123,7 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: Text(
                                 AppConstants.signup,
                                 style: TextStyle(
-                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    color: Colors.grey,
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -140,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               const Spacer(),
                               SocialMediaButton(
                                   color: white,
-                                  onPress: () async{
+                                  onPress: () async {
                                     // await signInWithFacebook(context);
                                   },
                                   title: AppConstants.facebook,
@@ -149,7 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               const Spacer(),
                               SocialMediaButton(
                                   color: white,
-                                  onPress: () async{
+                                  onPress: () async {
                                     // await signInWithGoogle();
                                   },
                                   title: AppConstants.google,
@@ -166,9 +151,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           // Full Name Field ..............................................................
 
                           customTextField(
-                              controller: fullNameController,
+                              controller: displayNameController,
                               title: AppConstants.fullname,
-                              hint: "Your Full Name",
+                              hint: "Your Name",
                               isPass: false,
                               fillColor: textfield_fillColor2),
 
@@ -179,17 +164,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           // Email Or Phone Number Field ...................................................
 
                           customTextField(
-                              controller: emailOrPhoneNumberController,
+                              controller: emailController,
                               title: AppConstants.emailorPhone,
                               hint: "Your E-mail Address",
                               isPass: false,
-                              fillColor: textfield_fillColor2
-                          ),
+                              fillColor: textfield_fillColor2),
 
                           const SizedBox(
                             height: 8,
                           ),
-
 
                           // customTextField(
                           //   controller: secondaryNumber,
@@ -199,7 +182,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           //     fillColor: textfield_fillColor2
                           // ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -220,24 +204,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             height: 78.0,
                             width: double.infinity,
                             child: IntlPhoneField(
-                              controller: secondaryNumber,
-                              decoration:  InputDecoration(
+                              controller: mobileNumber,
+                              decoration: InputDecoration(
                                 hintStyle: const TextStyle(
-                                  //fontFamily: semibold,
+                                    //fontFamily: semibold,
                                     color: hint_textColor,
-                                    fontSize: 15
-                                ),
+                                    fontSize: 15),
                                 hintText: '',
                                 isDense: true,
                                 filled: true,
                                 fillColor: textfield_fillColor2,
                                 border: OutlineInputBorder(
-
-                                  borderSide: BorderSide(color: Colors.amberAccent), // Change the border color as needed
-                                  borderRadius: BorderRadius.circular(10.0), // Adjust the radius as needed
+                                  borderSide:
+                                      BorderSide(color: Colors.amberAccent),
+                                  // Change the border color as needed
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // Adjust the radius as needed
                                 ),
-                                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: textfield_borderlColor) , borderRadius: BorderRadius.circular(10.0)),
-                                focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: textfield_borderlColor)),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: textfield_borderlColor),
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: textfield_borderlColor)),
                               ),
                               initialCountryCode: 'AU',
                               onChanged: (phone) {
@@ -259,8 +249,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               hint: "Your Password",
                               isObscure: isObscure1,
                               iconCallback: toggleObscure1
-                            // fillColor: textfield_fillColor2
-                          ),
+                              // fillColor: textfield_fillColor2
+                              ),
 
                           const SizedBox(
                             height: 5,
@@ -273,8 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               title: AppConstants.confirmPassword,
                               hint: "Confirm Your Password",
                               isObscure: isObscure2,
-                              iconCallback: toggleObscure2
-                          ),
+                              iconCallback: toggleObscure2),
 
                           const SizedBox(
                             height: 15,
@@ -284,15 +273,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                           CustomButton(
                               color: loginBtn_fillColor,
-                              onPress: () {
-                                // Get.to(DeliveryDetailsScreen(userId: '', userName: '', emailOrPhoneNumberController: ''));
-                                // signUp();
-                                // CommonLoaders.errorSnackBar(
-                                //   title: "Disabled",
-                                //   duration: 3,
-                                //   message: "Own Sign Up is disabled for now. Please contact your company admin for more information.",
-                                // );
-                              },
+                              onPress: _signUp,
                               title: AppConstants.signup,
                               txtColor: white),
 
@@ -305,7 +286,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const SizedBox(
                             height: 20,
                           ),
-
                         ],
                       ),
                     )
@@ -314,13 +294,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
-
-
-          if (isShowLoadingWidget) SizedBox(
-            width: Get.width,
-            height: Get.height,
-            child: LoadingScreen(),
-          ),
+          if (isShowLoadingWidget)
+            SizedBox(
+              width: Get.width,
+              height: Get.height,
+              child: LoadingScreen(),
+            ),
         ],
       ),
     );
