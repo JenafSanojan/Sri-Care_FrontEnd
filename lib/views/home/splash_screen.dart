@@ -31,9 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     if (await controller.isLocalLoginRecordsExist()) {
-      await Get.offAll(() => const MainScreen(), transition: Transition.fadeIn);
+      await controller.reVerifyLogin();
+      Get.offAll(() => const MainScreen(), transition: Transition.fadeIn);
     } else {
-      await Get.offAll(() => const LoginScreen());
+      Get.offAll(() => const LoginScreen());
     }
   }
 

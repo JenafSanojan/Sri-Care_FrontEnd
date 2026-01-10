@@ -56,7 +56,7 @@ class _SupportListScreenState extends State<SupportListScreen> {
       mobileBody: _buildContent(context, isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 800),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: _buildContent(context, isWeb: true),
         ),
       ),

@@ -26,136 +26,139 @@ class AboutContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: lightYellow, // Brand Cream Background
-      appBar: AppBar(
-        backgroundColor: orangeColor,
-        elevation: 0,
-        leading: isWeb || dontShowBackButton ? SizedBox() : IconButton(
-            icon: const Icon(Icons.arrow_back, color: white),
-            onPressed: Get.back),
-        title: const Text("About Sri-Care", style: TextStyle(color: white, fontWeight: FontWeight.bold)),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Container(
-          // Constrain width on web for better readability
-          constraints: BoxConstraints(maxWidth: isWeb ? 800 : double.infinity),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 1000),
+      child: Scaffold(
+        backgroundColor: lightYellow, // Brand Cream Background
+        appBar: AppBar(
+          backgroundColor: orangeColor,
+          elevation: 0,
+          leading: isWeb || dontShowBackButton ? SizedBox() : IconButton(
+              icon: const Icon(Icons.arrow_back, color: white),
+              onPressed: Get.back),
+          title: const Text("About Sri-Care", style: TextStyle(color: white, fontWeight: FontWeight.bold)),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Container(
+            // Constrain width on web for better readability
+            constraints: BoxConstraints(maxWidth: isWeb ? 800 : double.infinity),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
 
-                // --- 1. BRAND HEADER ---
-                Container(
-                  padding: const EdgeInsets.all(30),
-                  decoration: BoxDecoration(
-                    // gradient: const LinearGradient(
-                    //   colors: [orangeColor, textLightGreenColor], // Brand Gradient
-                    //   begin: Alignment.topLeft,
-                    //   end: Alignment.bottomRight,
+                  // --- 1. BRAND HEADER ---
+                  Container(
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      // gradient: const LinearGradient(
+                      //   colors: [orangeColor, textLightGreenColor], // Brand Gradient
+                      //   begin: Alignment.topLeft,
+                      //   end: Alignment.bottomRight,
+                      // ),
+                      borderRadius: BorderRadius.circular(25),
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: orangeColor.withValues(alpha: 0.3),
+                      //     blurRadius: 15,
+                      //     offset: const Offset(0, 5),
+                      //   ),
+                      // ],
+                    ),
+                    child: Image.asset("assets/images/Logo_Quote.png"),
+                    // child: Column(
+                    //   children: [
+                    //     // Placeholder for Logo - using Icon for now
+                    //     Container(
+                    //       padding: const EdgeInsets.all(15),
+                    //       decoration: const BoxDecoration(
+                    //         color: white,
+                    //         shape: BoxShape.circle,
+                    //       ),
+                    //       child: const Icon(Icons.cell_wifi, size: 50, color: orangeColor),
+                    //     ),
+                    //     const SizedBox(height: 15),
+                    //     const Text(
+                    //       "Sri-Care",
+                    //       style: TextStyle(
+                    //         fontSize: 28,
+                    //         fontWeight: FontWeight.bold,
+                    //         color: white,
+                    //         letterSpacing: 1.5,
+                    //       ),
+                    //     ),
+                    //     const SizedBox(height: 5),
+                    //     const Text(
+                    //       "To Connect Sri-Lanka Like Never Before.",
+                    //       textAlign: TextAlign.center,
+                    //       style: TextStyle(
+                    //         color: white,
+                    //         fontSize: 14,
+                    //         fontStyle: FontStyle.italic,
+                    //       ),
+                    //     ),
+                    //   ],
                     // ),
-                    borderRadius: BorderRadius.circular(25),
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: orangeColor.withValues(alpha: 0.3),
-                    //     blurRadius: 15,
-                    //     offset: const Offset(0, 5),
-                    //   ),
-                    // ],
                   ),
-                  child: Image.asset("assets/images/Logo_Quote.png"),
-                  // child: Column(
-                  //   children: [
-                  //     // Placeholder for Logo - using Icon for now
-                  //     Container(
-                  //       padding: const EdgeInsets.all(15),
-                  //       decoration: const BoxDecoration(
-                  //         color: white,
-                  //         shape: BoxShape.circle,
-                  //       ),
-                  //       child: const Icon(Icons.cell_wifi, size: 50, color: orangeColor),
-                  //     ),
-                  //     const SizedBox(height: 15),
-                  //     const Text(
-                  //       "Sri-Care",
-                  //       style: TextStyle(
-                  //         fontSize: 28,
-                  //         fontWeight: FontWeight.bold,
-                  //         color: white,
-                  //         letterSpacing: 1.5,
-                  //       ),
-                  //     ),
-                  //     const SizedBox(height: 5),
-                  //     const Text(
-                  //       "To Connect Sri-Lanka Like Never Before.",
-                  //       textAlign: TextAlign.center,
-                  //       style: TextStyle(
-                  //         color: white,
-                  //         fontSize: 14,
-                  //         fontStyle: FontStyle.italic,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                // --- 2. OUR MISSION CARD ---
-                _buildInfoCard(
-                  title: "Our Mission",
-                  content: "We aim to provide a seamless, state-of-the-art digital experience for all Sri Tel customers. Manage your connection, pay bills, and activate services without the hassle of manual intervention.",
-                  icon: Icons.lightbulb_outline,
-                ),
+                  // --- 2. OUR MISSION CARD ---
+                  _buildInfoCard(
+                    title: "Our Mission",
+                    content: "We aim to provide a seamless, state-of-the-art digital experience for all Sri Tel customers. Manage your connection, pay bills, and activate services without the hassle of manual intervention.",
+                    icon: Icons.lightbulb_outline,
+                  ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                // --- 3. FEATURES GRID ---
-                const Text(
-                  "What You Can Do",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColorOne),
-                ),
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    buildFeatureItem(Icons.receipt_long, "Pay Bills"),
-                    const SizedBox(width: 15),
-                    buildFeatureItem(Icons.swap_vert, "Reload"),
-                    const SizedBox(width: 15),
-                    buildFeatureItem(Icons.settings_input_antenna, "Services"),
-                  ],
-                ),
+                  // --- 3. FEATURES GRID ---
+                  const Text(
+                    "What You Can Do",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: textColorOne),
+                  ),
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      buildFeatureItem(Icons.receipt_long, "Pay Bills"),
+                      const SizedBox(width: 15),
+                      buildFeatureItem(Icons.swap_vert, "Reload"),
+                      const SizedBox(width: 15),
+                      buildFeatureItem(Icons.settings_input_antenna, "Services"),
+                    ],
+                  ),
 
-                const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-                // --- 4. DEVELOPER / TEAM INFO ---
-                // Great for your university assignment submission
-                _buildInfoCard(
-                  title: "Development Team",
-                  content: "Developed @ University of Ruhuna\n"
-                      "---------\n"
-                      "\nJAYASINGHE A.R. (SC/2020/11684)"
-                      "\nSANOJAN N.M.J. (SC/2020/11687)"
-                      "\nFERNANDO W.S.M. (SC/2020/11691)",
-                  icon: Icons.code,
-                ),
+                  // --- 4. DEVELOPER / TEAM INFO ---
+                  // Great for your university assignment submission
+                  _buildInfoCard(
+                    title: "Development Team",
+                    content: "Developed @ University of Ruhuna\n"
+                        "---------\n"
+                        "\nJAYASINGHE A.R. (SC/2020/11684)"
+                        "\nSANOJAN N.M.J. (SC/2020/11687)"
+                        "\nFERNANDO W.S.M. (SC/2020/11691)",
+                    icon: Icons.code,
+                  ),
 
-                const SizedBox(height: 40),
+                  const SizedBox(height: 40),
 
-                // --- 5. FOOTER ---
-                const Text(
-                  AppConstants.version,
-                  style: TextStyle(color: greyColor, fontSize: 12),
-                ),
-                const SizedBox(height: 5),
-                const Text(
-                  "© 2026 Sri Tel PLC. All rights reserved.",
-                  style: TextStyle(color: greyColor, fontSize: 12),
-                ),
-                const SizedBox(height: 20),
-              ],
+                  // --- 5. FOOTER ---
+                  const Text(
+                    AppConstants.version,
+                    style: TextStyle(color: greyColor, fontSize: 12),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    "© 2026 Sri Tel PLC. All rights reserved.",
+                    style: TextStyle(color: greyColor, fontSize: 12),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

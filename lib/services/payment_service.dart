@@ -10,8 +10,8 @@ import '../entities/packageBilling/payment_response.dart';
 import '../entities/packageBilling/transaction.dart';
 
 class PaymentService {
-  final String _servicePath = '${NetworkConfigs.getBaseUrl()}/api/payment';
-  final _uuid = const Uuid();
+  final String _servicePath = '${NetworkConfigs.getBaseUrl()}/api/payments';
+  final Uuid _uuid = Uuid();
 
   /// Initiate a payment transaction
   /// Returns PaymentResponse with transaction details and OTP status
@@ -22,6 +22,7 @@ class PaymentService {
     required String expiry,
     required String cvv,
     required String purpose, // 'BILL_PAYMENT' or 'TOP_UP'
+    required String idempotencyKey,
   }) async {
     try {
       final isConnected = await NetworkManager.instance.isConnected();
@@ -32,9 +33,6 @@ class PaymentService {
             message: "Make sure you're connected and try again");
         return null;
       }
-
-      // Generate idempotency key to prevent duplicate payments
-      final idempotencyKey = _uuid.v4();
 
       final paymentRequest = PaymentRequest(
         billId: billId,
@@ -47,7 +45,7 @@ class PaymentService {
       );
 
       final headers = {
-        ...NetworkConfigs.defaultHeaders,
+        ...NetworkConfigs.getHeaders(),
         'idempotency-key': idempotencyKey,
       };
 
@@ -94,7 +92,7 @@ class PaymentService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/confirm'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({
           'providerRef': providerRef,
           'otp': otp,
@@ -172,7 +170,7 @@ class PaymentService {
 
       final response = await http.get(
         uri,
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -197,7 +195,7 @@ class PaymentService {
 
       final response = await http.get(
         Uri.parse('$_servicePath/$transactionId'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -226,6 +224,7 @@ class PaymentService {
       expiry: expiry,
       cvv: cvv,
       purpose: 'BILL_PAYMENT',
+      idempotencyKey: "bill-${DateTime.now().toString()}_${_uuid.v4().substring(0,7)}",
     );
   }
 
@@ -242,6 +241,7 @@ class PaymentService {
       expiry: expiry,
       cvv: cvv,
       purpose: 'TOP_UP',
+      idempotencyKey: "topup-${DateTime.now().toString()}_${_uuid.v4().substring(0,7)}",
     );
   }
 }

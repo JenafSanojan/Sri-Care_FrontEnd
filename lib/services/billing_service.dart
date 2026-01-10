@@ -23,7 +23,7 @@ class BillingService {
 
       final response = await http.get(
         Uri.parse(_servicePath),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -63,7 +63,7 @@ class BillingService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/generate'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode(body),
       );
 

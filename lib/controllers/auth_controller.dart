@@ -38,12 +38,13 @@ class AuthController extends GetxController {
         user.token!.isNotEmpty &&
         password != null &&
         password.isNotEmpty) {
-      final bool isSignInSuccess = await userApiService
-          .canSignInWithEmailAndPassword(user.email, password);
-      if (isSignInSuccess) {
-        setAuthGlobals(user);
+      final User? responseUser = await userApiService
+          .signInWithEmailAndPassword(user.email, password);
+      if (responseUser != null) {
+        setAuthGlobals(responseUser);
+        return true;
       }
-      return isSignInSuccess;
+      return false;
     }
     return false;
   }
@@ -166,8 +167,8 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
-    GetStorage().erase();
-    localStorage.erase();
+    GlobalAuthData.clear();
+    await localStorage.erase();
     Get.offAll(() => LoginScreen());
   }
 

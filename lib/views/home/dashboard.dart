@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/notification_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/profile/profile_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/special/bill_tile.dart';
@@ -80,21 +82,27 @@ class MobileDashboard extends StatelessWidget {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text("Good Morning,",
-                              style: TextStyle(color: white, fontSize: 16)),
-                          SizedBox(height: 5),
-                          Text("077 123 4567",
+                        children: [
+                          Text(
+                              "Greetings, ${GlobalAuthData.instance.user.displayName}",
+                              style:
+                                  const TextStyle(color: white, fontSize: 16)),
+                          const SizedBox(height: 5),
+                          Text("${GlobalAuthData.instance.user.mobileNumber}",
                               style: TextStyle(
                                   color: white,
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold)),
                         ],
                       ),
-                      const CircleAvatar(
-                        radius: 25,
-                        backgroundColor: white,
-                        child: Icon(Icons.person, color: orangeColor, size: 30),
+                      InkWell(
+                        child: const CircleAvatar(
+                          radius: 25,
+                          backgroundColor: white,
+                          child:
+                              Icon(Icons.person, color: orangeColor, size: 30),
+                        ),
+                        onTap: () => {Get.to(() => const ProfileScreen())},
                       )
                     ],
                   ),
@@ -108,25 +116,25 @@ class MobileDashboard extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Current Package",
+                            Text("Connection Status", //Current Package",
                                 style: TextStyle(color: white, fontSize: 14)),
                             SizedBox(height: 5),
-                            Text("Super 4G Blaster",
+                            Text("Active", //"Super 4G Blaster",
                                 style: TextStyle(
-                                    color: white,
+                                    color: Colors.green.withAlpha(200),
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)),
                           ],
                         ),
-                        Text("LKR 950/mo",
-                            style: TextStyle(
-                                color: white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold)),
+                        // Text("LKR 950/mo",
+                        //     style: TextStyle(
+                        //         color: white,
+                        //         fontSize: 16,
+                        //         fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -232,18 +240,21 @@ class WebDashboard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 35,
-                    backgroundColor: white,
-                    child: Icon(Icons.person, color: orangeColor, size: 40),
+                  InkWell(
+                    child: const CircleAvatar(
+                      radius: 35,
+                      backgroundColor: white,
+                      child: Icon(Icons.person, color: orangeColor, size: 40),
+                    ),
+                    onTap: () => {Get.to(() => const ProfileScreen())},
                   ),
                   const SizedBox(width: 20),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text("Good Morning,",
+                    children: [
+                      Text("greetings, ${GlobalAuthData.instance.user.displayName}",//"Good Morning,",
                           style: TextStyle(color: white, fontSize: 18)),
-                      Text("077 123 4567",
+                      Text("${GlobalAuthData.instance.user.mobileNumber}",
                           style: TextStyle(
                               color: white,
                               fontSize: 32,
@@ -261,19 +272,19 @@ class WebDashboard extends StatelessWidget {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: const [
-                        Text("Current Package",
+                      children: [
+                        Text("Connection Status",//"Current Package",
                             style: TextStyle(color: white, fontSize: 14)),
-                        Text("Super 4G Blaster",
+                        Text("Active",//"Super 4G Blaster",
                             style: TextStyle(
-                                color: white,
+                                color: Colors.green.withAlpha(200),
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold)),
-                        Text("LKR 950/mo",
-                            style: TextStyle(
-                                color: white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)),
+                        // Text("LKR 950/mo",
+                        //     style: TextStyle(
+                        //         color: white,
+                        //         fontSize: 18,
+                        //         fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
