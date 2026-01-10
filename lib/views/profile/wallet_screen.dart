@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
-import '../../utils/colors.dart'; // Your brand colors
+import '../../utils/colors.dart';
 import '../../widget_common/responsive-layout.dart';
+import 'package:get/get.dart';
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});
@@ -23,11 +24,11 @@ class WalletScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: lightYellow,
       appBar: AppBar(
-        backgroundColor: lightYellow,
+        backgroundColor: logo_back,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: textColorOne),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Get.back(),
         ),
         title: const Text("My Wallet", style: TextStyle(color: textColorOne, fontWeight: FontWeight.bold)),
         centerTitle: true,
@@ -49,7 +50,7 @@ class WalletScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25),
                 boxShadow: [
                   BoxShadow(
-                    color: orangeColor.withOpacity(0.3),
+                    color: orangeColor.withValues(alpha: 0.3),
                     blurRadius: 15,
                     offset: const Offset(0, 8),
                   ),
@@ -68,7 +69,7 @@ class WalletScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: white.withOpacity(0.2),
+                          color: white.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: const Text("PREPAID", style: TextStyle(color: white, fontSize: 10, fontWeight: FontWeight.bold)),
@@ -134,7 +135,7 @@ class WalletScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: white,
                 borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: orangeColor.withOpacity(0.2)),
+                border: Border.all(color: orangeColor.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
@@ -210,7 +211,7 @@ class WalletScreen extends StatelessWidget {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),
@@ -239,7 +240,7 @@ class WalletScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: isCredit ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+              color: isCredit ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(

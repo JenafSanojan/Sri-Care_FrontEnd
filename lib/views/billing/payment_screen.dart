@@ -36,12 +36,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: lightYellow,
       appBar: AppBar(
-        backgroundColor: lightYellow,
+        backgroundColor: logo_back,
         elevation: 0,
-        leading: widget.dontShowBackButton ? SizedBox() : IconButton(
-            icon: const Icon(Icons.arrow_back, color: white),
-            onPressed: Get.back),
-        title: const Text("Payment", style: TextStyle(color: textColorOne, fontWeight: FontWeight.bold)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: textColorOne),
+          onPressed: () => Get.back(),
+        ),
+        title: const Text("Reloads & Payment", style: TextStyle(color: textColorOne, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

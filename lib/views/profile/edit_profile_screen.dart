@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/widget_common/custom_text_field_with_icon.dart';
 import '../../Global/global_configs.dart';
 import '../../utils/colors.dart';
+import '../../widget_common/custom_text_widget.dart';
 import '../../widget_common/responsive-layout.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -130,35 +132,36 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               // --- FORM FIELDS ---
 
               // 1. Name Field
-              _buildTextField(
-                label: "Full Name",
+              customTextFieldWithIcon(
+                hint: "Full Name",
                 controller: _nameController,
-                icon: Icons.person_outline,
+                suffixIcon: Icon(Icons.person_outline),
                 validator: (val) => val!.isEmpty ? "Name cannot be empty" : null,
               ),
 
               const SizedBox(height: 20),
 
               // 2. Mobile Field
-              _buildTextField(
-                label: "Mobile Number",
+              customTextFieldWithIcon(
+                hint: "Mobile Number",
                 controller: _phoneController,
-                icon: Icons.phone_android,
-                keyboardType: TextInputType.phone,
-                validator: (val) {
-                  if (val!.isEmpty) return "Phone number is required";
-                  if (val.length < 9) return "Enter a valid phone number";
-                  return null;
-                },
+                suffixIcon: Icon(Icons.phone_android),
+                isReadOnly: true,
+                // keyboardType: TextInputType.phone,
+                // validator: (val) {
+                //   if (val!.isEmpty) return "Phone number is required";
+                //   if (val.length < 9) return "Enter a valid phone number";
+                //   return null;
+                // },
               ),
 
               const SizedBox(height: 20),
 
               // 3. Email Field (Read Only)
-              _buildTextField(
-                label: "Email Address",
+              customTextFieldWithIcon(
+                hint: "Email Address",
                 controller: _emailController,
-                icon: Icons.email_outlined,
+                suffixIcon: Icon(Icons.email_outlined),
                 isReadOnly: true,
               ),
 
@@ -166,7 +169,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Email cannot be changed manually. Contact support.",
+                  "Mobile Number and Email cannot be changed manually. Contact support.",
                   style: TextStyle(color: greyColor, fontSize: 12),
                 ),
               ),
@@ -177,38 +180,4 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required TextEditingController controller,
-    required IconData icon,
-    bool isReadOnly = false,
-    TextInputType keyboardType = TextInputType.text,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      readOnly: isReadOnly,
-      keyboardType: keyboardType,
-      validator: validator,
-      style: TextStyle(color: isReadOnly ? greyColor : textColorOne),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: isReadOnly ? greyColor : orangeColor),
-        filled: true,
-        fillColor: isReadOnly ? Colors.grey.withValues(alpha: 0.1) : white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: const BorderSide(color: orangeColor, width: 1.5),
-        ),
-      ),
-    );
-  }
 }

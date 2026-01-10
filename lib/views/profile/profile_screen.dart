@@ -5,6 +5,7 @@ import 'package:sri_tel_flutter_web_mob/views/profile/wallet_screen.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/responsive-layout.dart';
 import 'edit_profile_screen.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -59,16 +60,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: white),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Get.back(),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit, color: white),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const EditProfileScreen()));
+              Get.to(() => const EditProfileScreen());
             },
           )
         ],
@@ -210,10 +208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       valueColor: orangeColor,
                       showArrow: true,
                       onTap:  () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const WalletScreen()));
+                        Get.to(() => const WalletScreen());
                       },
                   ),
                 ],

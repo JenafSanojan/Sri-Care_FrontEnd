@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/views/profile/profile_screen.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../entities/popup_item.dart';
@@ -165,10 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: "Account Settings",
               subtitle: "Manage profile & security",
               onTap: () {
-                // Route to user profile page
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Routing to Profile...")));
+                Get.to(() => const ProfileScreen());
               },
             ),
             _buildSettingsTile(

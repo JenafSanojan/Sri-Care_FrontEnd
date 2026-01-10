@@ -87,19 +87,19 @@ class _MainScreenState extends State<MainScreen> {
   // List of menu items with their icons and titles
   final List<MenuItem> _webMenuItems = [
     MenuItem(icon: Icons.home, title: 'Home'),
-    MenuItem(icon: Icons.file_copy, title: 'Packages'),
+    MenuItem(icon: Icons.folder, title: 'Packages'),
     MenuItem(icon: Icons.miscellaneous_services, title: 'Services'),
     MenuItem(icon: Icons.payment, title: 'Reload/Pay'),
-    MenuItem(icon: Icons.scale, title: 'Usage History'),
-    MenuItem(icon: Icons.scale, title: 'Get Support'),
+    MenuItem(icon: Icons.gas_meter, title: 'Usage History'),
+    MenuItem(icon: Icons.support, title: 'Get Support'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
     // MenuItem(icon: Icons.person, title: 'Profile'),
     MenuItem(icon: Icons.info, title: 'About'),
   ];
   final List<MenuItem> _mobMenuItems = [
     MenuItem(icon: Icons.home, title: 'Home'),
-    MenuItem(icon: Icons.production_quantity_limits, title: 'Packages'),
-    MenuItem(icon: Icons.scale, title: 'Usage'),
+    MenuItem(icon: Icons.folder, title: 'Packages'),
+    MenuItem(icon: Icons.gas_meter, title: 'Usage'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
   ];
 
@@ -109,8 +109,13 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void _onDrawerItemTapped(int index) {
-    Get.to(() => _mobDrawerWidgetOptions[index]);
+  void _onMobileDrawerItemTapped(int index) {
+    if(index == 0){ // for home, just change index
+      _onItemTapped(0);
+      return;
+    } else {
+      Get.to(() => _mobDrawerWidgetOptions[index]);
+    }
   }
 
   @override
@@ -188,7 +193,7 @@ class _MainScreenState extends State<MainScreen> {
                 // Background color for selected item
                 onTap: () {
                   Navigator.pop(context); // Close the drawer
-                  _onDrawerItemTapped(index);
+                  _onMobileDrawerItemTapped(index);
                 },
               );
             },
