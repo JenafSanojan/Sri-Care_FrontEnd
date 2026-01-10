@@ -43,7 +43,7 @@ class PackagesScreen extends StatelessWidget {
         name: "Unlimited Calls",
         description: "Any Network Calls + Free 3GB. Valid for 30 days.",
         cost: 351,
-        validity: 30 ,
+        validity: 30,
         demoColor: Colors.black87),
     TelcoPackage(
         name: "Super Combo",
@@ -59,8 +59,7 @@ class PackagesScreen extends StatelessWidget {
         description: "Unlimited YouTube 360p + 1GB Extra. Valid for 30 days.",
         cost: 250,
         validity: 30,
-        demoColor: Colors.redAccent
-    ),
+        demoColor: Colors.redAccent),
     TelcoPackage(
         name: "Gaming Blaster",
         description: "Low ping for PUBG/FreeFire. Valid for 30 days.",
@@ -99,37 +98,36 @@ class PackagesScreen extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.only(top: 10, bottom: 30),
           children: [
-            PackageSection(
-                title: "Frequently Activated Packs", packages: frequentPacks),
-            PackageSection(title: "HOT SELLERS", packages: hotSellers),
-            PackageSection(title: "Unlimited Plans", packages: unlimitedPlans),
+            PackageSection(title: "Internet Packages", packages: frequentPacks),
+            PackageSection(title: "Voice Packages", packages: hotSellers),
           ],
         ),
       ),
-      webBody: Scaffold(
-        backgroundColor: lightYellow,
-        appBar: AppBar(
-          title: Text("Packages",
-              style: TextStyle(color: white, fontWeight: FontWeight.w700)),
-          backgroundColor: orangeColor,
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Container(
-            width: 800, // Constrain width for web
-            color: white,
-            child: ListView(
-              padding: const EdgeInsets.all(40),
-              children: [
-                PackageSection(
-                    title: "Frequently Activated Packs",
-                    packages: frequentPacks),
-                const SizedBox(height: 30),
-                PackageSection(title: "HOT SELLERS", packages: hotSellers),
-                const SizedBox(height: 30),
-                PackageSection(
-                    title: "Unlimited Plans", packages: unlimitedPlans),
-              ],
+      webBody: Container(
+        constraints: const BoxConstraints(maxWidth: 1000),
+        child: Scaffold(
+          backgroundColor: lightYellow,
+          appBar: AppBar(
+            title: Text("Packages",
+                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+            backgroundColor: orangeColor,
+            centerTitle: true,
+          ),
+          body: Center(
+            child: Container(
+              width: 800, // Constrain width for web
+              color: white,
+              child: ListView(
+                padding: const EdgeInsets.all(40),
+                children: [
+                  PackageSection(
+                      title: "Data Packages",
+                      packages: frequentPacks),
+                  const SizedBox(height: 30),
+                  PackageSection(
+                      title: "Voice Packages", packages: unlimitedPlans),
+                ],
+              ),
             ),
           ),
         ),

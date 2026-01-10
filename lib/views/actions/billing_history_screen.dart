@@ -190,108 +190,111 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
             ),
           ),
         ),
-        webBody: Scaffold(
-          backgroundColor: lightYellow, // Brand Cream Background
-          appBar: AppBar(
-            title: Text("Billing History",
-                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
-            backgroundColor: orangeColor,
-            centerTitle: true,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
+        webBody: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Scaffold(
+            backgroundColor: lightYellow, // Brand Cream Background
+            appBar: AppBar(
+              title: Text("Billing History",
+                  style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+              backgroundColor: orangeColor,
+              centerTitle: true,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
 
-                // --- Date Picker Row ---
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomDatePickerButton(
-                      dateText: "01 Mar 2026",
-                      onTap: () {
-                        // Logic to pick From date
-                      },
-                    ),
-                    const Icon(Icons.arrow_forward, color: greyColor, size: 20),
-                    CustomDatePickerButton(
-                      dateText: "31 Mar 2026",
-                      onTap: () {
-                        // Logic to pick To date
-                      },
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 25),
-
-                // --- Total Spent Summary Card ---
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: orangeColor.withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
+                  // --- Date Picker Row ---
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomDatePickerButton(
+                        dateText: "01 Mar 2026",
+                        onTap: () {
+                          // Logic to pick From date
+                        },
+                      ),
+                      const Icon(Icons.arrow_forward, color: greyColor, size: 20),
+                      CustomDatePickerButton(
+                        dateText: "31 Mar 2026",
+                        onTap: () {
+                          // Logic to pick To date
+                        },
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: const [
-                      Text(
-                        "\$29",
-                        // Calculated total based on visible transactions
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: textColorOne,
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                        "Total Spent",
-                        style: TextStyle(
-                          color: greyColor,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
 
-                const SizedBox(height: 25),
+                  const SizedBox(height: 25),
 
-                // --- Transactions Header ---
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Transactions",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: textColorOne,
+                  // --- Total Spent Summary Card ---
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: orangeColor.withValues(alpha: 0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: const [
+                        Text(
+                          "\$29",
+                          // Calculated total based on visible transactions
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: textColorOne,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          "Total Spent",
+                          style: TextStyle(
+                            color: greyColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 15),
+                  const SizedBox(height: 25),
 
-                // --- Transaction List ---
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: transactions.length,
-                    padding: const EdgeInsets.only(bottom: 20),
-                    itemBuilder: (context, index) {
-                      return TransactionTile(transaction: transactions[index]);
-                    },
+                  // --- Transactions Header ---
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Transactions",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: textColorOne,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 15),
+
+                  // --- Transaction List ---
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: transactions.length,
+                      padding: const EdgeInsets.only(bottom: 20),
+                      itemBuilder: (context, index) {
+                        return TransactionTile(transaction: transactions[index]);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ));

@@ -71,7 +71,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       mobileBody: _buildContent(isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 600),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: _buildContent(isWeb: true),
         ),
       ),
@@ -136,6 +136,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hint: "Full Name",
                 controller: _nameController,
                 suffixIcon: Icon(Icons.person_outline),
+                isReadOnly: true,
                 validator: (val) => val!.isEmpty ? "Name cannot be empty" : null,
               ),
 
@@ -169,7 +170,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Mobile Number and Email cannot be changed manually. Contact support.",
+                  "Changing details are temporarily disabled. Contact support.",
                   style: TextStyle(color: greyColor, fontSize: 12),
                 ),
               ),

@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       mobileBody: _buildContent(isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 600),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: _buildContent(isWeb: true),
         ),
       ),

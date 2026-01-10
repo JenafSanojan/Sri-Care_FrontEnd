@@ -32,7 +32,7 @@ class _ServicesScreenState extends State<ServicesScreen>
       mobileBody: _buildContent(context, isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 800), // Wider for web
+          constraints: const BoxConstraints(maxWidth: 1000), // Wider for web
           child: _buildContent(context, isWeb: true),
         ),
       ),

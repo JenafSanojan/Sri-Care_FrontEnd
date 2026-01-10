@@ -68,7 +68,7 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
       mobileBody: _buildContent(isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 800),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: _buildContent(isWeb: true),
         ),
       ),
@@ -79,14 +79,14 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
     return Scaffold(
       backgroundColor: lightYellow,
       appBar: AppBar(
-        backgroundColor: logo_back,
+        backgroundColor: orangeColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: textColorOne),
+          icon: const Icon(Icons.arrow_back, color: white),
           onPressed: () => Get.back(),
         ),
         title: const Text("Pending Payments",
-            style: TextStyle(color: textColorOne, fontWeight: FontWeight.bold)),
+            style: TextStyle(color: white, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: _isLoading
