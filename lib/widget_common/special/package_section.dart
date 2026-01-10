@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
 import '../../entities/provisioning/telco_package.dart';
 import '../../utils/colors.dart';
+import 'package:get/get.dart';
 
 class PackageSection extends StatelessWidget {
   final String title;
@@ -42,7 +44,8 @@ class PackageSection extends StatelessWidget {
               return GestureDetector(
                 onTap: () => _showPackageDetails(context, package),
                 child: Container(
-                  width: 220, // Width of each card
+                  width: 220,
+                  // Width of each card
                   margin: const EdgeInsets.only(right: 15),
                   decoration: BoxDecoration(
                     color: package.demoColor,
@@ -87,7 +90,8 @@ class PackageSection extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           backgroundColor: lightYellow, // Cream background
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           contentPadding: EdgeInsets.zero,
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -97,10 +101,12 @@ class PackageSection extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   color: package.demoColor,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Center(
-                  child: Icon(Icons.wifi_tethering, size: 50, color: white.withValues(alpha: 0.5)),
+                  child: Icon(Icons.wifi_tethering,
+                      size: 50, color: white.withValues(alpha: 0.5)),
                 ),
               ),
               Padding(
@@ -109,7 +115,10 @@ class PackageSection extends StatelessWidget {
                   children: [
                     Text(
                       package.name,
-                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textColorOne),
+                      style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: textColorOne),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -120,7 +129,16 @@ class PackageSection extends StatelessWidget {
                     const SizedBox(height: 20),
                     Text(
                       "Rs. ${package.cost}",
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: orangeColor),
+                      style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: orangeColor),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "Validity: ${package.validity} days",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 14, color: greyColor),
                     ),
                     const SizedBox(height: 25),
                     SizedBox(
@@ -128,17 +146,15 @@ class PackageSection extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: orangeColor,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () {
-                          // TODO: Handle Activation Logic Here
-                          Navigator.pop(context); // Close dialog
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Package Activated Successfully!")),
-                          );
+                          Get.to(() => PaymentScreen(package: package,));
                         },
-                        child: const Text("Activate Now", style: TextStyle(color: white, fontSize: 16)),
+                        child: const Text("Activate Now",
+                            style: TextStyle(color: white, fontSize: 16)),
                       ),
                     ),
                   ],
@@ -151,4 +167,3 @@ class PackageSection extends StatelessWidget {
     );
   }
 }
-

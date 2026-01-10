@@ -30,7 +30,7 @@ class ChatService {
 
       final response = await http.get(
         Uri.parse('$_servicePath/history/$roomId'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -69,7 +69,7 @@ class ChatService {
 
       final response = await http.get(
         Uri.parse('$_sessionPath/active'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -108,7 +108,7 @@ class ChatService {
 
       final response = await http.get(
         Uri.parse('$_queuePath/status'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
