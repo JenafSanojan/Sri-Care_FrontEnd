@@ -281,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 40),
                         FooterCopyrightCreditText(),
                         Text(
-                          "Version: 7.9.23",
+                          AppConstants.version,
                           style: TextStyle(
                             fontSize: 10.0,
                             color: Colors.blue,
@@ -529,7 +529,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 40),
                               FooterCopyrightCreditText(),
                               Text(
-                                "Version: 7.9.23",
+                                AppConstants.version,
                                 style: TextStyle(
                                   fontSize: 10.0,
                                   color: Colors.blue,

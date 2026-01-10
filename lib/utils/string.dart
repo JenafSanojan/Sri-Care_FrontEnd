@@ -1,5 +1,7 @@
 
 class AppConstants{
+  static const String version = "Version 1.0.0 beta";
+
 // login page and SignUp page texts .......................................
   static const String login = "Sign In";
   static const String selectCom = "Select Company";

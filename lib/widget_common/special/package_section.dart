@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../entities/package.dart';
+import '../../entities/provisioning/telco_package.dart';
 import '../../utils/colors.dart';
 
 class PackageSection extends StatelessWidget {
   final String title;
-  final List<Package> packages;
+  final List<TelcoPackage> packages;
 
   const PackageSection({
     super.key,
@@ -60,7 +60,7 @@ class PackageSection extends StatelessWidget {
                   // Temporary child to show text since we don't have real images yet
                   child: Center(
                     child: Text(
-                      package.title,
+                      package.name,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
@@ -81,7 +81,7 @@ class PackageSection extends StatelessWidget {
   }
 
   // The Popup (Dialog) Logic
-  void _showPackageDetails(BuildContext context, Package package) {
+  void _showPackageDetails(BuildContext context, TelcoPackage package) {
     showDialog(
       context: context,
       builder: (context) {
@@ -108,7 +108,7 @@ class PackageSection extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      package.title,
+                      package.name,
                       style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textColorOne),
                     ),
                     const SizedBox(height: 10),
@@ -119,7 +119,7 @@ class PackageSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      package.price,
+                      "Rs. ${package.cost}",
                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: orangeColor),
                     ),
                     const SizedBox(height: 25),
