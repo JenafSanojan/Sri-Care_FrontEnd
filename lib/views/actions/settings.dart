@@ -60,134 +60,137 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: lightYellow,
-      appBar: AppBar(
-        backgroundColor: orangeColor,
-        elevation: 0,
-        title: const Text("Settings",
-            style: TextStyle(color: white, fontWeight: FontWeight.bold)),
-        centerTitle: true,
-        leading: widget.dontShowBackButton
-            ? SizedBox()
-            : IconButton(
-                icon: const Icon(Icons.arrow_back, color: white),
-                onPressed: Get.back),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const NotificationScreen()));
-              },
-              icon: const Icon(Icons.mail, color: white)),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // --- Section 1: App Preferences ---
-            _buildSectionHeader("Preferences"),
-
-            // Custom Switch Tile for Theme
-            Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4))
-                ],
-              ),
-              child: SwitchListTile(
-                activeColor: orangeColor,
-                secondary: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: lightYellow,
-                      borderRadius: BorderRadius.circular(10)),
-                  child:
-                      const Icon(Icons.dark_mode_outlined, color: orangeColor),
-                ),
-                title: const Text("Dark Theme",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: textColorOne)),
-                value: _isDarkMode,
-                onChanged: (val) {
-                  setState(() => _isDarkMode = val);
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 1000),
+      child: Scaffold(
+        backgroundColor: lightYellow,
+        appBar: AppBar(
+          backgroundColor: orangeColor,
+          elevation: 0,
+          title: const Text("Settings",
+              style: TextStyle(color: white, fontWeight: FontWeight.bold)),
+          centerTitle: true,
+          leading: widget.dontShowBackButton
+              ? SizedBox()
+              : IconButton(
+                  icon: const Icon(Icons.arrow_back, color: white),
+                  onPressed: Get.back),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationScreen()));
                 },
-              ),
-            ),
-
-            // Custom Switch Tile for Notifications
-            Container(
-              margin: const EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4))
-                ],
-              ),
-              child: SwitchListTile(
-                activeColor: orangeColor,
-                secondary: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: lightYellow,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Icon(Icons.notifications_outlined,
-                      color: orangeColor),
-                ),
-                title: const Text("Notifications",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: textColorOne)),
-                value: _notificationsEnabled,
-                onChanged: (val) {
-                  setState(() => _notificationsEnabled = val);
-                },
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            // --- Section 2: Account ---
-            _buildSectionHeader("General"),
-            _buildSettingsTile(
-              icon: Icons.person_outline,
-              title: "Account Settings",
-              subtitle: "Manage profile & security",
-              onTap: () {
-                Get.to(() => const ProfileScreen());
-              },
-            ),
-            _buildSettingsTile(
-              icon: Icons.language,
-              title: "Language",
-              subtitle: _currentLanguage, // Shows currently selected language
-              onTap: _changeLanguage, // Triggers the popup
-            ),
-            _buildSettingsTile(
-                icon: Icons.password,
-                title: "Change Password",
-                subtitle: "Change your account password",
-                onTap: () => Get.to(() => const ChangePasswordScreen()),
-                tileColor: orangeColor),
-            _buildSettingsTile(
-                icon: Icons.logout,
-                title: "Logout",
-                subtitle: "Logout from this device",
-                onTap: _logout,
-                tileColor: orangeColor),
+                icon: const Icon(Icons.mail, color: white)),
           ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              // --- Section 1: App Preferences ---
+              _buildSectionHeader("Preferences"),
+
+              // Custom Switch Tile for Theme
+              Container(
+                margin: const EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4))
+                  ],
+                ),
+                child: SwitchListTile(
+                  activeColor: orangeColor,
+                  secondary: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: lightYellow,
+                        borderRadius: BorderRadius.circular(10)),
+                    child:
+                        const Icon(Icons.dark_mode_outlined, color: orangeColor),
+                  ),
+                  title: const Text("Dark Theme",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: textColorOne)),
+                  value: _isDarkMode,
+                  onChanged: (val) {
+                    setState(() => _isDarkMode = val);
+                  },
+                ),
+              ),
+
+              // Custom Switch Tile for Notifications
+              Container(
+                margin: const EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4))
+                  ],
+                ),
+                child: SwitchListTile(
+                  activeColor: orangeColor,
+                  secondary: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: lightYellow,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: const Icon(Icons.notifications_outlined,
+                        color: orangeColor),
+                  ),
+                  title: const Text("Notifications",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: textColorOne)),
+                  value: _notificationsEnabled,
+                  onChanged: (val) {
+                    setState(() => _notificationsEnabled = val);
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 25),
+
+              // --- Section 2: Account ---
+              _buildSectionHeader("General"),
+              _buildSettingsTile(
+                icon: Icons.person_outline,
+                title: "Account Settings",
+                subtitle: "Manage profile & security",
+                onTap: () {
+                  Get.to(() => const ProfileScreen());
+                },
+              ),
+              _buildSettingsTile(
+                icon: Icons.language,
+                title: "Language",
+                subtitle: _currentLanguage, // Shows currently selected language
+                onTap: _changeLanguage, // Triggers the popup
+              ),
+              _buildSettingsTile(
+                  icon: Icons.password,
+                  title: "Change Password",
+                  subtitle: "Change your account password",
+                  onTap: () => Get.to(() => const ChangePasswordScreen()),
+                  tileColor: orangeColor),
+              _buildSettingsTile(
+                  icon: Icons.logout,
+                  title: "Logout",
+                  subtitle: "Logout from this device",
+                  onTap: _logout,
+                  tileColor: orangeColor),
+            ],
+          ),
         ),
       ),
     );

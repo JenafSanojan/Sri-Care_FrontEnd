@@ -497,35 +497,35 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               // Proceed to test ..........................................
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MainScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 34),
-                                    child: RichText(
-                                      text: const TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: "Proceed to Test",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: orangeColor),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              // TextButton(
+                              //   onPressed: () {
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => MainScreen(),
+                              //       ),
+                              //     );
+                              //   },
+                              //   child: Align(
+                              //     alignment: Alignment.centerLeft,
+                              //     child: Padding(
+                              //       padding: const EdgeInsets.symmetric(
+                              //           horizontal: 34),
+                              //       child: RichText(
+                              //         text: const TextSpan(
+                              //           children: [
+                              //             TextSpan(
+                              //               text: "Proceed to Test",
+                              //               style: TextStyle(
+                              //                   fontWeight: FontWeight.bold,
+                              //                   color: orangeColor),
+                              //             ),
+                              //           ],
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               const SizedBox(height: 40),
                               FooterCopyrightCreditText(),
                               Text(

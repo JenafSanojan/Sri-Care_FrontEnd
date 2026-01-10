@@ -13,7 +13,7 @@ class WalletScreen extends StatelessWidget {
       mobileBody: _buildContent(context, isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 600),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: _buildContent(context, isWeb: true),
         ),
       ),
