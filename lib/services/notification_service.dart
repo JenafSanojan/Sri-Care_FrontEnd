@@ -41,7 +41,7 @@ class NotificationService {
 
       final response = await http.get(
         uri,
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -87,7 +87,7 @@ class NotificationService {
 
       final response = await http.get(
         Uri.parse('$_servicePath/stats'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -121,7 +121,7 @@ class NotificationService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/mark-read'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({'notificationIds': notificationIds}),
       );
 
@@ -150,7 +150,7 @@ class NotificationService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/retry'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({'notificationId': notificationId}),
       );
 

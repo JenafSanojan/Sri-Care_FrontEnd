@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import '../../utils/colors.dart';
 
 class CreditCardInput extends StatelessWidget {
-  const CreditCardInput({super.key});
+  // 1. Add the controllers as final fields
+  final TextEditingController cardNumberController;
+  final TextEditingController expiryController;
+  final TextEditingController cvvController;
+  final TextEditingController cardHolderNameController;
+
+  const CreditCardInput({
+    super.key,
+    // 2. Require them in the constructor
+    required this.cardNumberController,
+    required this.expiryController,
+    required this.cvvController,
+    required this.cardHolderNameController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +44,18 @@ class CreditCardInput extends StatelessWidget {
 
           // Card Number
           TextFormField(
+            controller: cardNumberController, // Attached here
             keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(16)],
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(16)
+            ],
             decoration: InputDecoration(
               labelText: "Card Number",
               hintText: "0000 0000 0000 0000",
               prefixIcon: const Icon(Icons.credit_card, color: orangeColor),
               filled: true,
-              fillColor: lightYellow, // Subtle contrast
+              fillColor: lightYellow,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
               focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: orangeColor)),
             ),
@@ -52,6 +68,7 @@ class CreditCardInput extends StatelessWidget {
               // Expiry Date
               Expanded(
                 child: TextFormField(
+                  controller: expiryController, // Attached here
                   keyboardType: TextInputType.datetime,
                   decoration: InputDecoration(
                     labelText: "Expiry",
@@ -68,6 +85,7 @@ class CreditCardInput extends StatelessWidget {
               // CVV
               Expanded(
                 child: TextFormField(
+                  controller: cvvController, // Attached here
                   obscureText: true,
                   keyboardType: TextInputType.number,
                   inputFormatters: [LengthLimitingTextInputFormatter(3)],
@@ -87,6 +105,7 @@ class CreditCardInput extends StatelessWidget {
           const SizedBox(height: 15),
           // Name on Card
           TextFormField(
+            controller: cardHolderNameController, // Attached here
             decoration: InputDecoration(
               labelText: "Cardholder Name",
               prefixIcon: const Icon(Icons.person_outline, color: greyColor),
