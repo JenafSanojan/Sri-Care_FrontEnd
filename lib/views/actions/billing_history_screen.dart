@@ -8,6 +8,8 @@ import '../../widget_common/custom_date_picker.dart';
 import '../../widget_common/special/transaction_tile.dart';
 import 'package:get/get.dart';
 
+import 'notification_screen.dart';
+
 class BillingHistoryScreen extends StatefulWidget {
   final VoidCallback? drawerCallback;
   final bool dontShowBackButton;
@@ -82,7 +84,13 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
                     onPressed: Get.back),
             actions: [
               IconButton(
-                  onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()));
+                  },
+                  icon: const Icon(Icons.mail, color: white)),
             ],
           ),
           body: Padding(

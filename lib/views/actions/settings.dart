@@ -7,6 +7,7 @@ import '../../widget_common/pop_up_screens/selection_popup.dart';
 import 'package:get/get.dart';
 
 import '../auth/change_password_screen.dart';
+import 'notification_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   final VoidCallback? drawerCallback;
@@ -73,7 +74,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 onPressed: Get.back),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationScreen()));
+              },
+              icon: const Icon(Icons.mail, color: white)),
         ],
       ),
       body: SingleChildScrollView(

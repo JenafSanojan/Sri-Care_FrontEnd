@@ -6,6 +6,8 @@ import '../../widget_common/responsive-layout.dart';
 import '../../widget_common/special/package_section.dart';
 import 'package:get/get.dart';
 
+import 'notification_screen.dart';
+
 class PackagesScreen extends StatelessWidget {
   final VoidCallback? drawerCallback;
   final bool dontShowBackButton;
@@ -77,7 +79,13 @@ class PackagesScreen extends StatelessWidget {
                   onPressed: Get.back),
           actions: [
             IconButton(
-                onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationScreen()));
+                },
+                icon: const Icon(Icons.mail, color: white)),
           ],
         ),
         body: ListView(

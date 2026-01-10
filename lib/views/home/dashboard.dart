@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/actions/notification_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/special/bill_tile.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 
 class DashboardScreen extends StatelessWidget {
   final VoidCallback? drawerCallback;
+
   const DashboardScreen({Key? key, this.drawerCallback}) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class DashboardScreen extends StatelessWidget {
 // --- MOBILE DASHBOARD ---
 class MobileDashboard extends StatelessWidget {
   final VoidCallback? openDrawer;
+
   const MobileDashboard({super.key, this.openDrawer});
 
   @override
@@ -34,13 +37,21 @@ class MobileDashboard extends StatelessWidget {
         backgroundColor: orangeColor,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.menu, color: white),
-          onPressed: () => {
-                  openDrawer != null ? openDrawer!() : Scaffold.of(context).openDrawer(),
+            icon: const Icon(Icons.menu, color: white),
+            onPressed: () => {
+                  openDrawer != null
+                      ? openDrawer!()
+                      : Scaffold.of(context).openDrawer(),
                 }),
         actions: [
           IconButton(
-              onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationScreen()));
+              },
+              icon: const Icon(Icons.mail, color: white)),
         ],
       ),
       body: SingleChildScrollView(
