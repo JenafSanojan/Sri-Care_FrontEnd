@@ -22,15 +22,18 @@ class PackagesScreen extends StatelessWidget {
         name: "1.2 GB Anytime",
         description: "Valid for 10 Days. Best for light browsing.",
         cost: 119,
+        validity: 10,
         demoColor: Colors.brown),
     TelcoPackage(
         name: "2.8 GB Anytime",
         description: "Valid for 21 Days. Great for students.",
         cost: 239,
+        validity: 21,
         demoColor: Colors.green),
     TelcoPackage(
         name: "5 GB Work",
         description: "Valid for 30 Days. 8AM to 5PM.",
+        validity: 30,
         cost: 450,
         demoColor: Colors.blueAccent),
   ];
@@ -38,26 +41,31 @@ class PackagesScreen extends StatelessWidget {
   final List<TelcoPackage> hotSellers = [
     TelcoPackage(
         name: "Unlimited Calls",
-        description: "Any Network Calls + Free 3GB.",
+        description: "Any Network Calls + Free 3GB. Valid for 30 days.",
         cost: 351,
+        validity: 30 ,
         demoColor: Colors.black87),
     TelcoPackage(
         name: "Super Combo",
-        description: "Non-stop Social Media + 30GB.",
+        description: "Non-stop Social Media + 30GB. Valid for 30 days.",
         cost: 479,
+        validity: 30,
         demoColor: Colors.teal),
   ];
 
   final List<TelcoPackage> unlimitedPlans = [
     TelcoPackage(
         name: "Non-Stop YouTube",
-        description: "Unlimited YouTube 360p + 1GB Extra.",
+        description: "Unlimited YouTube 360p + 1GB Extra. Valid for 30 days.",
         cost: 250,
-        demoColor: Colors.redAccent),
+        validity: 30,
+        demoColor: Colors.redAccent
+    ),
     TelcoPackage(
         name: "Gaming Blaster",
-        description: "Low ping for PUBG/FreeFire.",
+        description: "Low ping for PUBG/FreeFire. Valid for 30 days.",
         cost: 500,
+        validity: 30,
         demoColor: Colors.deepPurple),
   ];
 

@@ -5,6 +5,7 @@ import 'package:sri_tel_flutter_web_mob/views/actions/about_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/settings.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/billing/pending_bills_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/chat/support_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/dashboard.dart';
 import 'package:sri_tel_flutter_web_mob/views/profile/services_screen.dart';
@@ -40,21 +41,47 @@ class _MainScreenState extends State<MainScreen> {
 
   final controller = Get.put(AuthController());
 
-  int _selectedIndex = 0; // Tracks the currently selected menu item
+  int _selectedMobIndex = 0; // Tracks the currently selected menu item
+  int _selectedWebIndex = 0; // Tracks the currently selected menu item
   bool _isSidebarHovered = false; // New state to track sidebar hover
   bool _isSidebarOpen = false; // New state to track sidebar open/close
 
   // List of destinations/pages for the menu
   static final List<Widget> _webWidgetOptions = <Widget>[
     Center(child: DashboardScreen()),
-    Center(child: PackagesScreen(dontShowBackButton: true,)),
-    Center(child: ServicesScreen(dontShowBackButton: true,)),
-    Center(child: PaymentScreen(dontShowBackButton: true,)),
-    Center(child: BillingHistoryScreen(dontShowBackButton: true,)),
-    Center(child: SupportListScreen(dontShowBackButton: true,)),
-    Center(child: SettingsScreen(dontShowBackButton: true,)),
+    Center(
+        child: PackagesScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
+        child: ServicesScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
+        child: PaymentScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
+        child: PendingBillsScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
+        child: BillingHistoryScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
+        child: SupportListScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
+        child: SettingsScreen(
+      dontShowBackButton: true,
+    )),
     // Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
-    Center(child: AboutScreen(dontShowBackButton: true,)),
+    Center(
+        child: AboutScreen(
+      dontShowBackButton: true,
+    )),
   ];
 
   static final List<Widget> _mobDrawerWidgetOptions = <Widget>[
@@ -62,6 +89,7 @@ class _MainScreenState extends State<MainScreen> {
     Center(child: PackagesScreen()),
     Center(child: ServicesScreen()),
     Center(child: PaymentScreen()),
+    Center(child: PendingBillsScreen()),
     Center(child: BillingHistoryScreen()),
     Center(child: SupportListScreen()),
     Center(child: SettingsScreen()),
@@ -75,12 +103,21 @@ class _MainScreenState extends State<MainScreen> {
           child: DashboardScreen(
         drawerCallback: toggleDrawer,
       )),
-      Center(child: PackagesScreen(
-        drawerCallback: toggleDrawer, dontShowBackButton: true,)),
-      Center(child: BillingHistoryScreen(
-        drawerCallback: toggleDrawer, dontShowBackButton: true,)),
-      Center(child: SettingsScreen(
-        drawerCallback: toggleDrawer, dontShowBackButton: true,)),
+      Center(
+          child: PackagesScreen(
+        drawerCallback: toggleDrawer,
+        dontShowBackButton: true,
+      )),
+      Center(
+          child: BillingHistoryScreen(
+        drawerCallback: toggleDrawer,
+        dontShowBackButton: true,
+      )),
+      Center(
+          child: SettingsScreen(
+        drawerCallback: toggleDrawer,
+        dontShowBackButton: true,
+      )),
     ];
   }
 
@@ -90,6 +127,7 @@ class _MainScreenState extends State<MainScreen> {
     MenuItem(icon: Icons.folder, title: 'Packages'),
     MenuItem(icon: Icons.miscellaneous_services, title: 'Services'),
     MenuItem(icon: Icons.payment, title: 'Reload/Pay'),
+    MenuItem(icon: Icons.pending, title: 'Pending Bills'),
     MenuItem(icon: Icons.gas_meter, title: 'Usage History'),
     MenuItem(icon: Icons.support, title: 'Get Support'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
@@ -104,13 +142,17 @@ class _MainScreenState extends State<MainScreen> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    print("Tapped index: $index");
+    if (mounted) {
+      setState(() {
+        _selectedMobIndex = index;
+      });
+    }
   }
 
   void _onMobileDrawerItemTapped(int index) {
-    if(index == 0){ // for home, just change index
+    if (index == 0) {
+      // for home, just change index
       _onItemTapped(0);
       return;
     } else {
@@ -118,18 +160,23 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  void _onWebSidebarItemTapped(int index) {
+    if (mounted) {
+      setState(() {
+        _selectedWebIndex = index;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    // Schedule the check to run AFTER the first frame is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (GlobalAuthData.isInitialized == false) {
-        print("global auth not initialized, re verifying login");
-        controller.reVerifyLogin();
-      } else {
-        print("global auth already initialized");
-      }
-    });
+    if (GlobalAuthData.isInitialized == false) { // initializing it in splash for now, but this is a fallback and secure way
+      print("global auth not initialized, re verifying login");
+      controller.reVerifyLogin();
+    } else {
+      print("global auth already initialized");
+    }
   }
 
   @override
@@ -137,7 +184,8 @@ class _MainScreenState extends State<MainScreen> {
     return ResponsiveLayout(
       mobileBody: Scaffold(
         key: mobileScaffoldKey,
-        body: _mobWidgetOptions().elementAt(_selectedIndex), // Main content area
+        body: _mobWidgetOptions().elementAt(_selectedMobIndex),
+        // Main content area
         bottomNavigationBar: BottomNavigationBar(
           items: _mobMenuItems.map((item) {
             return BottomNavigationBarItem(
@@ -145,7 +193,7 @@ class _MainScreenState extends State<MainScreen> {
               label: '',
             );
           }).toList(),
-          currentIndex: _selectedIndex,
+          currentIndex: _selectedMobIndex,
           // Current selected item
           backgroundColor: Colors.blueGrey[900],
           // Background color for the bar
@@ -175,19 +223,19 @@ class _MainScreenState extends State<MainScreen> {
               return ListTile(
                 leading: Icon(
                   item.icon,
-                  color: _selectedIndex == index
+                  color: _selectedMobIndex == index
                       ? darkGreen
                       : Colors.grey, // Icon color based on selection
                 ),
                 title: Text(
                   item.title,
                   style: TextStyle(
-                    color: _selectedIndex == index
+                    color: _selectedMobIndex == index
                         ? darkGreen
                         : Colors.grey, // Text color based on selection
                   ),
                 ),
-                selected: _selectedIndex == index,
+                selected: _selectedMobIndex == index,
                 // Highlight selected item
                 selectedTileColor: Colors.blueGrey[700],
                 // Background color for selected item
@@ -235,7 +283,7 @@ class _MainScreenState extends State<MainScreen> {
                     return ListTile(
                       leading: Icon(
                         item.icon,
-                        color: _selectedIndex == index
+                        color: _selectedWebIndex == index
                             ? darkGreen
                             : Colors.grey, // Icon color based on selection
                       ),
@@ -243,7 +291,7 @@ class _MainScreenState extends State<MainScreen> {
                           ? Text(
                               item.title,
                               style: TextStyle(
-                                color: _selectedIndex == index
+                                color: _selectedWebIndex == index
                                     ? darkGreen
                                     : Colors
                                         .grey, // Text color based on selection
@@ -253,11 +301,11 @@ class _MainScreenState extends State<MainScreen> {
                               maxLines: 1,
                             )
                           : null,
-                      selected: _selectedIndex == index,
+                      selected: _selectedWebIndex == index,
                       // Highlight selected item
                       selectedTileColor: Colors.blueGrey[700],
                       // Background color for selected item
-                      onTap: () => _onItemTapped(index),
+                      onTap: () => _onWebSidebarItemTapped(index),
                     );
                   },
                 ),
@@ -265,7 +313,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             // Main content area, takes remaining space
             Expanded(
-              child: _webWidgetOptions.elementAt(_selectedIndex),
+              child: _webWidgetOptions.elementAt(_selectedWebIndex),
             ),
           ],
         ),

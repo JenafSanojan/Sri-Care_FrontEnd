@@ -29,7 +29,7 @@ class ProvisioningService {
 
       final response = await http.get(
         Uri.parse('$_servicePath/balance/$phoneNumber'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -64,7 +64,7 @@ class ProvisioningService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/reload'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({
           'phone': phoneNumber,
           'amount': amount,
@@ -117,7 +117,7 @@ class ProvisioningService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/package'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({
           'phone': phoneNumber,
           'packageName': packageName,
@@ -180,7 +180,7 @@ class ProvisioningService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/roaming'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({
           'phone': phoneNumber,
           'status': enabled,
@@ -225,7 +225,7 @@ class ProvisioningService {
 
       final response = await http.get(
         Uri.parse('$_servicePath/profile/$phoneNumber'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {
@@ -249,7 +249,7 @@ class ProvisioningService {
 
       final response = await http.get(
         Uri.parse('$_servicePath/packages'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
       );
 
       if (response.statusCode == 200) {

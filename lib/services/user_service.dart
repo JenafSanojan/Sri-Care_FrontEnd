@@ -38,7 +38,7 @@ class UserService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/register'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({
           "name": displayName,
           "email": email,
@@ -61,37 +61,6 @@ class UserService {
     }
   }
 
-  // check resp code only
-  Future<bool> canSignInWithEmailAndPassword(String emailOrPhoneNumber,
-      String password) async {
-    try {
-      // checking the connection
-      final isConnected = await NetworkManager.instance.isConnected();
-      // print(isConnected);
-      if (!isConnected) {
-        CommonLoaders.errorSnackBar(
-            title: "No Internet",
-            duration: 3,
-            message: "Make sure you're connected and try again");
-        return true; // cannot re verify now, but old session exist
-      }
-
-      final response = await http.post(
-        Uri.parse('$_servicePath/login'),
-        headers: NetworkConfigs.defaultHeaders,
-        body: jsonEncode({"email": emailOrPhoneNumber, "password": password}),
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      }
-      return false;
-    } catch (e) {
-      print('Error during canSignIn check: $e');
-      return false;
-    }
-  }
-
   // feedbacks handled here
   Future<User?> signInWithEmailAndPassword(String email,
       String password) async {
@@ -109,7 +78,7 @@ class UserService {
 
       final response = await http.post(
         Uri.parse('$_servicePath/login'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({"email": email, "password": password}),
       );
 
@@ -131,7 +100,7 @@ class UserService {
     try {
       final response = await http.post(
         Uri.parse('$_servicePath/change-password'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({
           "user": user.toJson(),
           "currentPassword": currentPassword,
@@ -157,7 +126,7 @@ class UserService {
     try {
       final response = await http.post(
         Uri.parse('$_servicePath/reset-password'),
-        headers: NetworkConfigs.defaultHeaders,
+        headers: NetworkConfigs.getHeaders(),
         body: jsonEncode({"email": email}),
       );
 
