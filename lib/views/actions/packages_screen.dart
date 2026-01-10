@@ -1,28 +1,62 @@
 import 'package:flutter/material.dart';
 
-import '../../entities/package.dart';
+import '../../entities/provisioning/telco_package.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/responsive-layout.dart';
 import '../../widget_common/special/package_section.dart';
+import 'package:get/get.dart';
 
 class PackagesScreen extends StatelessWidget {
-  PackagesScreen({super.key});
+  final VoidCallback? drawerCallback;
+  final bool dontShowBackButton;
+
+  PackagesScreen(
+      {Key? key, this.drawerCallback, this.dontShowBackButton = false})
+      : super(key: key);
 
   // Sample Data Generation
-  final List<Package> frequentPacks = [
-    Package(title: "1.2 GB Anytime", description: "Valid for 10 Days. Best for light browsing.", price: "Rs. 119", demoColor: Colors.brown),
-    Package(title: "2.8 GB Anytime", description: "Valid for 21 Days. Great for students.", price: "Rs. 239", demoColor: Colors.green),
-    Package(title: "5 GB Work", description: "Valid for 30 Days. 8AM to 5PM.", price: "Rs. 450", demoColor: Colors.blueAccent),
+  final List<TelcoPackage> frequentPacks = [
+    TelcoPackage(
+        name: "1.2 GB Anytime",
+        description: "Valid for 10 Days. Best for light browsing.",
+        cost: 119,
+        demoColor: Colors.brown),
+    TelcoPackage(
+        name: "2.8 GB Anytime",
+        description: "Valid for 21 Days. Great for students.",
+        cost: 239,
+        demoColor: Colors.green),
+    TelcoPackage(
+        name: "5 GB Work",
+        description: "Valid for 30 Days. 8AM to 5PM.",
+        cost: 450,
+        demoColor: Colors.blueAccent),
   ];
 
-  final List<Package> hotSellers = [
-    Package(title: "Unlimited Calls", description: "Any Network Calls + Free 3GB.", price: "Rs. 351", demoColor: Colors.black87),
-    Package(title: "Super Combo", description: "Non-stop Social Media + 30GB.", price: "Rs. 479", demoColor: Colors.teal),
+  final List<TelcoPackage> hotSellers = [
+    TelcoPackage(
+        name: "Unlimited Calls",
+        description: "Any Network Calls + Free 3GB.",
+        cost: 351,
+        demoColor: Colors.black87),
+    TelcoPackage(
+        name: "Super Combo",
+        description: "Non-stop Social Media + 30GB.",
+        cost: 479,
+        demoColor: Colors.teal),
   ];
 
-  final List<Package> unlimitedPlans = [
-    Package(title: "Non-Stop YouTube", description: "Unlimited YouTube 360p + 1GB Extra.", price: "Rs. 250", demoColor: Colors.redAccent),
-    Package(title: "Gaming Blaster", description: "Low ping for PUBG/FreeFire.", price: "Rs. 500", demoColor: Colors.deepPurple),
+  final List<TelcoPackage> unlimitedPlans = [
+    TelcoPackage(
+        name: "Non-Stop YouTube",
+        description: "Unlimited YouTube 360p + 1GB Extra.",
+        cost: 250,
+        demoColor: Colors.redAccent),
+    TelcoPackage(
+        name: "Gaming Blaster",
+        description: "Low ping for PUBG/FreeFire.",
+        cost: 500,
+        demoColor: Colors.deepPurple),
   ];
 
   @override
@@ -32,17 +66,25 @@ class PackagesScreen extends StatelessWidget {
         backgroundColor: lightYellow,
         appBar: AppBar(
           backgroundColor: orangeColor,
-          title: const Text("Packages", style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+          title: const Text("Packages",
+              style: TextStyle(color: white, fontWeight: FontWeight.w700)),
           elevation: 0,
-          leading: const Icon(Icons.menu, color: white),
+          centerTitle: true,
+          leading: dontShowBackButton
+              ? SizedBox()
+              : IconButton(
+                  icon: const Icon(Icons.arrow_back, color: white),
+                  onPressed: Get.back),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
           ],
         ),
         body: ListView(
           padding: const EdgeInsets.only(top: 10, bottom: 30),
           children: [
-            PackageSection(title: "Frequently Activated Packs", packages: frequentPacks),
+            PackageSection(
+                title: "Frequently Activated Packs", packages: frequentPacks),
             PackageSection(title: "HOT SELLERS", packages: hotSellers),
             PackageSection(title: "Unlimited Plans", packages: unlimitedPlans),
           ],
@@ -50,7 +92,12 @@ class PackagesScreen extends StatelessWidget {
       ),
       webBody: Scaffold(
         backgroundColor: lightYellow,
-        appBar: AppBar(title: Text("Packages", style: TextStyle(color: white, fontWeight: FontWeight.w700)), backgroundColor: orangeColor, centerTitle: true,),
+        appBar: AppBar(
+          title: Text("Packages",
+              style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+          backgroundColor: orangeColor,
+          centerTitle: true,
+        ),
         body: Center(
           child: Container(
             width: 800, // Constrain width for web
@@ -58,11 +105,14 @@ class PackagesScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(40),
               children: [
-                PackageSection(title: "Frequently Activated Packs", packages: frequentPacks),
+                PackageSection(
+                    title: "Frequently Activated Packs",
+                    packages: frequentPacks),
                 const SizedBox(height: 30),
                 PackageSection(title: "HOT SELLERS", packages: hotSellers),
                 const SizedBox(height: 30),
-                PackageSection(title: "Unlimited Plans", packages: unlimitedPlans),
+                PackageSection(
+                    title: "Unlimited Plans", packages: unlimitedPlans),
               ],
             ),
           ),

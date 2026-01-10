@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 
-import '../../entities/transaction.dart';
-import '../../entities/transaction_type.dart';
+import '../../entities/packageBilling/transaction.dart';
+import '../../entities/packageBilling/transaction_type.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/custom_date_picker.dart';
 import '../../widget_common/special/transaction_tile.dart';
+import 'package:get/get.dart';
 
 class BillingHistoryScreen extends StatefulWidget {
-  const BillingHistoryScreen({super.key});
+  final VoidCallback? drawerCallback;
+  final bool dontShowBackButton;
+
+  const BillingHistoryScreen(
+      {Key? key, this.drawerCallback, this.dontShowBackButton = false})
+      : super(key: key);
 
   @override
   State<BillingHistoryScreen> createState() => _BillingHistoryScreenState();
@@ -65,10 +71,15 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
           backgroundColor: lightYellow, // Brand Cream Background
           appBar: AppBar(
             backgroundColor: orangeColor,
-            title:
-                const Text("Billing History", style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+            title: const Text("Billing History",
+                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
             elevation: 0,
-            leading: const Icon(Icons.menu, color: white),
+            centerTitle: true,
+            leading: widget.dontShowBackButton
+                ? SizedBox()
+                : IconButton(
+                    icon: const Icon(Icons.arrow_back, color: white),
+                    onPressed: Get.back),
             actions: [
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.mail, color: white)),
@@ -120,7 +131,8 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
                   child: Column(
                     children: const [
                       Text(
-                        "\$29", // Calculated total based on visible transactions
+                        "\$29",
+                        // Calculated total based on visible transactions
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -172,7 +184,12 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
         ),
         webBody: Scaffold(
           backgroundColor: lightYellow, // Brand Cream Background
-          appBar: AppBar(title: Text("Billing History", style: TextStyle(color: white, fontWeight: FontWeight.w700)), backgroundColor: orangeColor, centerTitle: true,),
+          appBar: AppBar(
+            title: Text("Billing History",
+                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+            backgroundColor: orangeColor,
+            centerTitle: true,
+          ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -219,7 +236,8 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
                   child: Column(
                     children: const [
                       Text(
-                        "\$29", // Calculated total based on visible transactions
+                        "\$29",
+                        // Calculated total based on visible transactions
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,

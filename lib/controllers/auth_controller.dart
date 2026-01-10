@@ -3,7 +3,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/main_screen.dart';
 import '../Global/global_configs.dart';
-import '../services/firebase_services/user_service.dart';
+import '../services/user_service.dart';
 import '../views/auth/login_screen.dart';
 import '../widget_common/snack_bar.dart';
 import '../entities/user.dart';

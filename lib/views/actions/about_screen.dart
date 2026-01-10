@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/utils/string.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/responsive-layout.dart';
 import '../../widget_common/special/feature_item.dart';
+import 'package:get/get.dart';
 
 class AboutScreen extends StatelessWidget {
-  const AboutScreen({super.key});
+  final bool dontShowBackButton;
+  const AboutScreen({super.key, this.dontShowBackButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +19,10 @@ class AboutScreen extends StatelessWidget {
 }
 
 class AboutContent extends StatelessWidget {
+  final bool dontShowBackButton;
   final bool isWeb;
 
-  const AboutContent({super.key, required this.isWeb});
+  const AboutContent({super.key, required this.isWeb, this.dontShowBackButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +31,9 @@ class AboutContent extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: orangeColor,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: isWeb || dontShowBackButton ? SizedBox() : IconButton(
+            icon: const Icon(Icons.arrow_back, color: white),
+            onPressed: Get.back),
         title: const Text("About Sri-Care", style: TextStyle(color: white, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
@@ -48,53 +51,54 @@ class AboutContent extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(30),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [orangeColor, textLightGreenColor], // Brand Gradient
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    // gradient: const LinearGradient(
+                    //   colors: [orangeColor, textLightGreenColor], // Brand Gradient
+                    //   begin: Alignment.topLeft,
+                    //   end: Alignment.bottomRight,
+                    // ),
                     borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: orangeColor.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: orangeColor.withValues(alpha: 0.3),
+                    //     blurRadius: 15,
+                    //     offset: const Offset(0, 5),
+                    //   ),
+                    // ],
                   ),
-                  child: Column(
-                    children: [
-                      // Placeholder for Logo - using Icon for now
-                      Container(
-                        padding: const EdgeInsets.all(15),
-                        decoration: const BoxDecoration(
-                          color: white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.cell_wifi, size: 50, color: orangeColor),
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        "Sri-Care",
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: white,
-                          letterSpacing: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      const Text(
-                        "To Connect Sri-Lanka Like Never Before.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: white,
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: Image.asset("assets/images/Logo_Quote.png"),
+                  // child: Column(
+                  //   children: [
+                  //     // Placeholder for Logo - using Icon for now
+                  //     Container(
+                  //       padding: const EdgeInsets.all(15),
+                  //       decoration: const BoxDecoration(
+                  //         color: white,
+                  //         shape: BoxShape.circle,
+                  //       ),
+                  //       child: const Icon(Icons.cell_wifi, size: 50, color: orangeColor),
+                  //     ),
+                  //     const SizedBox(height: 15),
+                  //     const Text(
+                  //       "Sri-Care",
+                  //       style: TextStyle(
+                  //         fontSize: 28,
+                  //         fontWeight: FontWeight.bold,
+                  //         color: white,
+                  //         letterSpacing: 1.5,
+                  //       ),
+                  //     ),
+                  //     const SizedBox(height: 5),
+                  //     const Text(
+                  //       "To Connect Sri-Lanka Like Never Before.",
+                  //       textAlign: TextAlign.center,
+                  //       style: TextStyle(
+                  //         color: white,
+                  //         fontSize: 14,
+                  //         fontStyle: FontStyle.italic,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
 
                 const SizedBox(height: 30),
@@ -130,7 +134,11 @@ class AboutContent extends StatelessWidget {
                 // Great for your university assignment submission
                 _buildInfoCard(
                   title: "Development Team",
-                  content: "Developed by Group 42\nUniversity of Ruhuna\n\n• Student A (ID: 1234)\n• Student B (ID: 5678)\n• Student C (ID: 9012)",
+                  content: "Developed @ University of Ruhuna\n"
+                      "---------\n"
+                      "\nJAYASINGHE A.R. (SC/2020/11684)"
+                      "\nSANOJAN N.M.J. (SC/2020/11687)"
+                      "\nFERNANDO W.S.M. (SC/2020/11691)",
                   icon: Icons.code,
                 ),
 
@@ -138,7 +146,7 @@ class AboutContent extends StatelessWidget {
 
                 // --- 5. FOOTER ---
                 const Text(
-                  "Version 1.0.0 Beta",
+                  AppConstants.version,
                   style: TextStyle(color: greyColor, fontSize: 12),
                 ),
                 const SizedBox(height: 5),

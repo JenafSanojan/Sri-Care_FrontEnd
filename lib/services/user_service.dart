@@ -4,8 +4,8 @@ import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/entities/user.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
 import 'package:http/http.dart' as http;
-import '../../controllers/network_manager.dart';
-import '../../entities/error.dart';
+import '../controllers/network_manager.dart';
+import '../entities/error.dart';
 
 // List<dynamic> jsonBody = jsonDecode(response.body);
 // return jsonBody.map((e) => KitchenUser.fromJson(e)).toList();
@@ -13,7 +13,7 @@ import '../../entities/error.dart';
 // return Shop.fromJson(jsonDecode(response.body));
 
 class UserService {
-  final String _servicePath = NetworkConfigs.getBaseUrl() + '/api/users';
+  final String _servicePath = '${NetworkConfigs.getBaseUrl()}/api/users';
 
   // feedbacks handled here
   Future<User?> signUpWithEmailAndPassword({
