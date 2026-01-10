@@ -22,8 +22,8 @@ class OtpPopup extends StatefulWidget {
 
 class _OtpPopupState extends State<OtpPopup> {
   // Controllers for 4 digits
-  final List<TextEditingController> _controllers = List.generate(4, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
+  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
 
   // Timer State
   int _secondsRemaining = 30;
@@ -62,9 +62,9 @@ class _OtpPopupState extends State<OtpPopup> {
 
   Future<void> _handleVerify() async {
     String otp = _controllers.map((c) => c.text).join();
-    if (otp.length != 4) {
+    if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter the full 4-digit code"), backgroundColor: Colors.red),
+        const SnackBar(content: Text("Please enter the full 6-digit code"), backgroundColor: Colors.red),
       );
       return;
     }
@@ -114,7 +114,7 @@ class _OtpPopupState extends State<OtpPopup> {
             ),
             const SizedBox(height: 10),
             Text(
-              "We sent a code to \n${GlobalAuthData.instance.user.email} \n${GlobalAuthData.instance.user.mobileNumber}",
+              "Please enter the 6-digit code you received.",
               textAlign: TextAlign.center,
               style: const TextStyle(color: greyColor, fontSize: 14),
             ),
@@ -123,7 +123,7 @@ class _OtpPopupState extends State<OtpPopup> {
             // OTP Input Fields
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(4, (index) => _buildDigitInput(index)),
+              children: List.generate(6, (index) => _buildDigitInput(index)),
             ),
 
             const SizedBox(height: 30),
@@ -193,7 +193,7 @@ class _OtpPopupState extends State<OtpPopup> {
         onChanged: (value) {
           if (value.isNotEmpty) {
             // Auto-focus next field
-            if (index < 3) {
+            if (index < 5) {
               FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
             } else {
               // Hide keyboard if last digit entered
