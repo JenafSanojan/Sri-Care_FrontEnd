@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sri_tel_flutter_web_mob/utils/string.dart';
+import 'package:sri_tel_flutter_web_mob/views/auth/reset_password_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/auth/signup_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/main_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/loading_widgets/loading_widget.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
+import '../../controllers/auth_controller.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/custom_button_widget.dart';
 import '../../widget_common/custom_password_field_widget.dart';
@@ -33,10 +35,32 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isShowLoadingWidget = false;
 
-  // final controller = Get.put(AuthController());
+  final controller = Get.put(AuthController());
 
   TextEditingController emailOrPhoneController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
+
+  void _login() async {
+    if (mounted) {
+      setState(() {
+        isShowLoadingWidget = true;
+      });
+    }
+
+    if (emailOrPhoneController.text.isNotEmpty &&
+        pwdController.text.isNotEmpty) {
+      await controller.emailAndPasswordSignIn(
+        emailOrPhoneNumber: emailOrPhoneController.text,
+        password: pwdController.text,
+      );
+    }
+
+    if (mounted) {
+      setState(() {
+        isShowLoadingWidget = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -156,38 +180,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             fillColor: textfield_fillColor),
                         SizedBox(height: 10),
                         customPasswordField(
-                            title: AppConstants.password,
-                            controller: pwdController,
-                            hint: "Your Password",
-                            isObscure: isObscure,
-                            fillColor: textfield_fillColor,
-                            iconCallback: toggleObscure,
+                          title: AppConstants.password,
+                          controller: pwdController,
+                          hint: "Your Password",
+                          isObscure: isObscure,
+                          fillColor: textfield_fillColor,
+                          iconCallback: toggleObscure,
                         ),
                         const SizedBox(height: 17),
                         // Login Button.....................................................
                         CustomButton(
                           color: loginBtn_fillColor,
-                          onPress: () async {
-                            if (mounted) {
-                              setState(() {
-                                isShowLoadingWidget = true;
-                              });
-                            }
-
-                            if (emailOrPhoneController.text.isNotEmpty &&
-                                pwdController.text.isNotEmpty) {
-                              // await controller.emailAndPasswordSignIn(
-                              //   emailOrPhoneNumber: emailOrPhoneController.text,
-                              //   password: pwdController.text,
-                              // );
-                            }
-
-                            if (mounted) {
-                              setState(() {
-                                isShowLoadingWidget = false;
-                              });
-                            }
-                          },
+                          onPress: _login,
                           title: AppConstants.login,
                           txtColor: white,
                         ),
@@ -198,14 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 22),
                             child: TextButton(
-                              onPressed: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => ResetPasswordScreen(isForget: true),
-                                //   ),
-                                // );
-                              },
+                              onPressed: () => Get.to(() => ResetPassword()),
                               child: const Text(
                                 AppConstants.forgotpassword,
                                 style: TextStyle(color: forget_txtColor),
@@ -228,8 +225,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 34),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 34),
                               child: RichText(
                                 text: const TextSpan(
                                   children: [
@@ -264,8 +261,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 34),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 34),
                               child: RichText(
                                 text: const TextSpan(
                                   children: [
@@ -284,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 40),
                         FooterCopyrightCreditText(),
                         Text(
-                          "Version: 7.9.23",
+                          AppConstants.version,
                           style: TextStyle(
                             fontSize: 10.0,
                             color: Colors.blue,
@@ -298,19 +295,19 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             isShowLoadingWidget
                 ? SizedBox(
-              width: Get.width,
-              height: Get.height,
-              child: GestureDetector(
-                onTap: () {
-                  if (mounted) {
-                    setState(() {
-                      isShowLoadingWidget = false;
-                    });
-                  }
-                },
-                child: LoadingScreen(),
-              ),
-            )
+                    width: Get.width,
+                    height: Get.height,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (mounted) {
+                          setState(() {
+                            isShowLoadingWidget = false;
+                          });
+                        }
+                      },
+                      child: LoadingScreen(),
+                    ),
+                  )
                 : SizedBox(),
           ],
         ),
@@ -319,21 +316,17 @@ class _LoginScreenState extends State<LoginScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Stack(
-                    children: [
-                      Container(
-                        color: logo_back
-                      ),
-                      Center(
-                        child: SizedBox(
+                    child: Stack(
+                  children: [
+                    Container(color: logo_back),
+                    Center(
+                      child: SizedBox(
                           width: 200,
                           height: 200,
-                          child: Image.asset("assets/images/Logo_Quote.png")
-                        ),
-                      )
-                    ],
-                  )
-                ), // Decorative Left Panel
+                          child: Image.asset("assets/images/Logo_Quote.png")),
+                    )
+                  ],
+                )), // Decorative Left Panel
                 Expanded(
                   child: SizedBox(
                     width: 600,
@@ -385,7 +378,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     imagePath: "assets/images/facebook.png",
                                   ),
                                   Tooltip(
-                                    message: 'Facebook Sign-In is not Available Now.',
+                                    message:
+                                        'Facebook Sign-In is not Available Now.',
                                     child: Icon(
                                       Icons.info_outline,
                                       size: 18,
@@ -413,7 +407,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     imagePath: "assets/images/google.png",
                                   ),
                                   Tooltip(
-                                    message: 'Google Sign-In is not Available Now.',
+                                    message:
+                                        'Google Sign-In is not Available Now.',
                                     child: Icon(
                                       Icons.info_outline,
                                       size: 18,
@@ -442,27 +437,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               // Login Button.....................................................
                               CustomButton(
                                 color: loginBtn_fillColor,
-                                onPress: () async {
-                                  if (mounted) {
-                                    setState(() {
-                                      isShowLoadingWidget = true;
-                                    });
-                                  }
-
-                                  if (emailOrPhoneController.text.isNotEmpty &&
-                                      pwdController.text.isNotEmpty) {
-                                    // await controller.emailAndPasswordSignIn(
-                                    //   emailOrPhoneNumber: emailOrPhoneController.text,
-                                    //   password: pwdController.text,
-                                    // );
-                                  }
-
-                                  if (mounted) {
-                                    setState(() {
-                                      isShowLoadingWidget = false;
-                                    });
-                                  }
-                                },
+                                onPress: _login,
                                 title: AppConstants.login,
                                 txtColor: white,
                               ),
@@ -474,14 +449,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 22),
                                   child: TextButton(
-                                    onPressed: () {
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => ResetPasswordScreen(isForget: true),
-                                      //   ),
-                                      // );
-                                    },
+                                    onPressed: () =>
+                                        Get.to(() => ResetPassword()),
                                     child: const Text(
                                       AppConstants.forgotpassword,
                                       style: TextStyle(color: forget_txtColor),
@@ -560,7 +529,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 40),
                               FooterCopyrightCreditText(),
                               Text(
-                                "Version: 7.9.23",
+                                AppConstants.version,
                                 style: TextStyle(
                                   fontSize: 10.0,
                                   color: Colors.blue,
@@ -577,19 +546,19 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             isShowLoadingWidget
                 ? SizedBox(
-              width: Get.width,
-              height: Get.height,
-              child: GestureDetector(
-                onTap: () {
-                  if (mounted) {
-                    setState(() {
-                      isShowLoadingWidget = false;
-                    });
-                  }
-                },
-                child: LoadingScreen(),
-              ),
-            )
+                    width: Get.width,
+                    height: Get.height,
+                    child: GestureDetector(
+                      onTap: () {
+                        if (mounted) {
+                          setState(() {
+                            isShowLoadingWidget = false;
+                          });
+                        }
+                      },
+                      child: LoadingScreen(),
+                    ),
+                  )
                 : SizedBox(),
           ],
         ),

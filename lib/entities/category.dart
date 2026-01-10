@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sri_tel_flutter_web_mob/entities/common.dart';
+import 'package:sri_tel_flutter_web_mob/entities/ui_entities.dart';
 
 const parentCatIds = ['ProductCat1', 'ProductCat2', 'ProductCat3'];
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sri_tel_flutter_web_mob/services/firebase_services/category_service.dart'; // Your CategoryService
+import 'package:sri_tel_flutter_web_mob/services/category_service.dart'; // Your CategoryService
 import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
 
 import '../entities/category.dart';
-import '../entities/common.dart'; // For CommonLoaders
+import '../entities/ui_entities.dart'; // For CommonLoaders
 
 class CategoryProvider extends ChangeNotifier {
   final CategoryService _categoryService = CategoryService();

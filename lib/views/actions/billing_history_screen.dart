@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 
-import '../../entities/transaction.dart';
-import '../../entities/transaction_type.dart';
+import '../../entities/packageBilling/transaction.dart';
+import '../../entities/packageBilling/transaction_type.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/custom_date_picker.dart';
 import '../../widget_common/special/transaction_tile.dart';
+import 'package:get/get.dart';
+
+import 'notification_screen.dart';
 
 class BillingHistoryScreen extends StatefulWidget {
-  const BillingHistoryScreen({super.key});
+  final VoidCallback? drawerCallback;
+  final bool dontShowBackButton;
+
+  const BillingHistoryScreen(
+      {Key? key, this.drawerCallback, this.dontShowBackButton = false})
+      : super(key: key);
 
   @override
   State<BillingHistoryScreen> createState() => _BillingHistoryScreenState();
@@ -25,7 +34,8 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
     TransactionItem(
       title: "Netflix",
       description: "Entertainment",
-      imagePath: "assets/netflix.png", // Example path
+      imagePath: "assets/netflix.png",
+      // Example path
       date: "05 Mar 2026",
       type: TransactionType.debit,
       amount: 12,
@@ -58,116 +68,232 @@ class _BillingHistoryScreenState extends State<BillingHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: lightYellow, // Brand Cream Background
-      appBar: AppBar(
-        backgroundColor: lightYellow,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: textColorOne),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          "Billing History",
-          style: TextStyle(color: textColorOne, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-
-            // --- Date Picker Row ---
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return ResponsiveLayout(
+        mobileBody: Scaffold(
+          backgroundColor: lightYellow, // Brand Cream Background
+          appBar: AppBar(
+            backgroundColor: orangeColor,
+            title: const Text("Billing History",
+                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+            elevation: 0,
+            centerTitle: true,
+            leading: widget.dontShowBackButton
+                ? SizedBox()
+                : IconButton(
+                    icon: const Icon(Icons.arrow_back, color: white),
+                    onPressed: Get.back),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()));
+                  },
+                  icon: const Icon(Icons.mail, color: white)),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
               children: [
-                CustomDatePickerButton(
-                  dateText: "01 Mar 2026",
-                  onTap: () {
-                    // Logic to pick From date
-                  },
-                ),
-                const Icon(Icons.arrow_forward, color: greyColor, size: 20),
-                CustomDatePickerButton(
-                  dateText: "31 Mar 2026",
-                  onTap: () {
-                    // Logic to pick To date
-                  },
-                ),
-              ],
-            ),
+                const SizedBox(height: 10),
 
-            const SizedBox(height: 25),
+                // --- Date Picker Row ---
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomDatePickerButton(
+                      dateText: "01 Mar 2026",
+                      onTap: () {
+                        // Logic to pick From date
+                      },
+                    ),
+                    const Icon(Icons.arrow_forward, color: greyColor, size: 20),
+                    CustomDatePickerButton(
+                      dateText: "31 Mar 2026",
+                      onTap: () {
+                        // Logic to pick To date
+                      },
+                    ),
+                  ],
+                ),
 
-            // --- Total Spent Summary Card ---
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: orangeColor.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+                const SizedBox(height: 25),
+
+                // --- Total Spent Summary Card ---
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: orangeColor.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Column(
-                children: const [
-                  Text(
-                    "\$29", // Calculated total based on visible transactions
+                  child: Column(
+                    children: const [
+                      Text(
+                        "\$29",
+                        // Calculated total based on visible transactions
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: textColorOne,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Total Spent",
+                        style: TextStyle(
+                          color: greyColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                // --- Transactions Header ---
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Transactions",
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: textColorOne,
                     ),
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Total Spent",
+                ),
+
+                const SizedBox(height: 15),
+
+                // --- Transaction List ---
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: transactions.length,
+                    padding: const EdgeInsets.only(bottom: 20),
+                    itemBuilder: (context, index) {
+                      return TransactionTile(transaction: transactions[index]);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        webBody: Scaffold(
+          backgroundColor: lightYellow, // Brand Cream Background
+          appBar: AppBar(
+            title: Text("Billing History",
+                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+            backgroundColor: orangeColor,
+            centerTitle: true,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                const SizedBox(height: 10),
+
+                // --- Date Picker Row ---
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomDatePickerButton(
+                      dateText: "01 Mar 2026",
+                      onTap: () {
+                        // Logic to pick From date
+                      },
+                    ),
+                    const Icon(Icons.arrow_forward, color: greyColor, size: 20),
+                    CustomDatePickerButton(
+                      dateText: "31 Mar 2026",
+                      onTap: () {
+                        // Logic to pick To date
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 25),
+
+                // --- Total Spent Summary Card ---
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: orangeColor.withValues(alpha: 0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: const [
+                      Text(
+                        "\$29",
+                        // Calculated total based on visible transactions
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: textColorOne,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Total Spent",
+                        style: TextStyle(
+                          color: greyColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 25),
+
+                // --- Transactions Header ---
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Transactions",
                     style: TextStyle(
-                      color: greyColor,
-                      fontSize: 14,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: textColorOne,
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            // --- Transactions Header ---
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Transactions",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: textColorOne,
                 ),
-              ),
-            ),
 
-            const SizedBox(height: 15),
+                const SizedBox(height: 15),
 
-            // --- Transaction List ---
-            Expanded(
-              child: ListView.builder(
-                itemCount: transactions.length,
-                padding: const EdgeInsets.only(bottom: 20),
-                itemBuilder: (context, index) {
-                  return TransactionTile(transaction: transactions[index]);
-                },
-              ),
+                // --- Transaction List ---
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: transactions.length,
+                    padding: const EdgeInsets.only(bottom: 20),
+                    itemBuilder: (context, index) {
+                      return TransactionTile(transaction: transactions[index]);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
