@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/views/profile/profile_screen.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../entities/popup_item.dart';
@@ -7,9 +8,15 @@ import '../../widget_common/pop_up_screens/selection_popup.dart';
 import 'package:get/get.dart';
 
 import '../auth/change_password_screen.dart';
+import 'notification_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final VoidCallback? drawerCallback;
+  final bool dontShowBackButton;
+
+  const SettingsScreen(
+      {Key? key, this.drawerCallback, this.dontShowBackButton = false})
+      : super(key: key);
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -33,7 +40,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   // Logic to handle language change
   void _changeLanguage() async {
     // Call our reusable popup
-    final int? result = await showSelectionPopup(context, "Select Language", _languages);
+    final int? result =
+        await showSelectionPopup(context, "Select Language", _languages);
 
     // Update state based on return code
     if (result != null) {
@@ -57,11 +65,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         backgroundColor: orangeColor,
         elevation: 0,
-        title: const Text("Settings", style: TextStyle(color: white, fontWeight: FontWeight.bold)),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: const Text("Settings",
+            style: TextStyle(color: white, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        leading: widget.dontShowBackButton
+            ? SizedBox()
+            : IconButton(
+                icon: const Icon(Icons.arrow_back, color: white),
+                onPressed: Get.back),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const NotificationScreen()));
+              },
+              icon: const Icon(Icons.mail, color: white)),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -76,16 +97,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
               decoration: BoxDecoration(
                 color: white,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4))
+                ],
               ),
               child: SwitchListTile(
                 activeColor: orangeColor,
                 secondary: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: lightYellow, borderRadius: BorderRadius.circular(10)),
-                  child: const Icon(Icons.dark_mode_outlined, color: orangeColor),
+                  decoration: BoxDecoration(
+                      color: lightYellow,
+                      borderRadius: BorderRadius.circular(10)),
+                  child:
+                      const Icon(Icons.dark_mode_outlined, color: orangeColor),
                 ),
-                title: const Text("Dark Theme", style: TextStyle(fontWeight: FontWeight.bold, color: textColorOne)),
+                title: const Text("Dark Theme",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: textColorOne)),
                 value: _isDarkMode,
                 onChanged: (val) {
                   setState(() => _isDarkMode = val);
@@ -99,16 +130,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
               decoration: BoxDecoration(
                 color: white,
                 borderRadius: BorderRadius.circular(15),
-                boxShadow: [BoxShadow(color: Colors.grey.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4))
+                ],
               ),
               child: SwitchListTile(
                 activeColor: orangeColor,
                 secondary: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: lightYellow, borderRadius: BorderRadius.circular(10)),
-                  child: const Icon(Icons.notifications_outlined, color: orangeColor),
+                  decoration: BoxDecoration(
+                      color: lightYellow,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Icon(Icons.notifications_outlined,
+                      color: orangeColor),
                 ),
-                title: const Text("Notifications", style: TextStyle(fontWeight: FontWeight.bold, color: textColorOne)),
+                title: const Text("Notifications",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: textColorOne)),
                 value: _notificationsEnabled,
                 onChanged: (val) {
                   setState(() => _notificationsEnabled = val);
@@ -125,9 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: "Account Settings",
               subtitle: "Manage profile & security",
               onTap: () {
-                // Route to user profile page
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Routing to Profile...")));
+                Get.to(() => const ProfileScreen());
               },
             ),
             _buildSettingsTile(
@@ -137,19 +176,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onTap: _changeLanguage, // Triggers the popup
             ),
             _buildSettingsTile(
-              icon: Icons.password,
-              title: "Change Password",
-              subtitle: "Change your account password",
-              onTap: () => Get.to(() => const ChangePasswordScreen()),
-              tileColor: orangeColor
-            ),
+                icon: Icons.password,
+                title: "Change Password",
+                subtitle: "Change your account password",
+                onTap: () => Get.to(() => const ChangePasswordScreen()),
+                tileColor: orangeColor),
             _buildSettingsTile(
-              icon: Icons.logout,
-              title: "Logout",
-              subtitle: "Logout from this device",
-              onTap: _logout,
-              tileColor: orangeColor
-            ),
+                icon: Icons.logout,
+                title: "Logout",
+                subtitle: "Logout from this device",
+                onTap: _logout,
+                tileColor: orangeColor),
           ],
         ),
       ),
@@ -209,13 +246,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         title: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold, color: textColorOne),
+          style:
+              const TextStyle(fontWeight: FontWeight.bold, color: textColorOne),
         ),
         subtitle: Text(
           subtitle,
           style: const TextStyle(color: greyColor, fontSize: 12),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, color: greyColor, size: 16),
+        trailing:
+            const Icon(Icons.arrow_forward_ios, color: greyColor, size: 16),
       ),
     );
   }

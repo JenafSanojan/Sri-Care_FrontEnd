@@ -4,13 +4,17 @@ import '../utils/colors.dart';
 
 Widget customTextFieldWithIcon(
     {String? hint,
+    String? Function(String?)? validator,
     TextEditingController? controller,
     Function? iconCallback,
     Widget? suffixIcon,
+    bool? isReadOnly = false,
     final Function(String)? onChanged,
     String? title}) {
 // Widget customTextFieldWithIcon({String? hint  ,isPass, TextEditingController? controller, VoidCallback? onIconPressed,}){
   return TextFormField(
+    validator: validator,
+    readOnly: isReadOnly ?? false,
     onChanged: onChanged,
     controller: controller,
     decoration: InputDecoration(
