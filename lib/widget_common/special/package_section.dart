@@ -1,11 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/services/package_service.dart';
-import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
-import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
-import '../../entities/provisioning/telco_Package.dart';
+import '../../entities/provisioning/telco_package.dart';
 import '../../utils/colors.dart';
 import 'package:get/get.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sri_tel_flutter_web_mob/entities/provisioning/telco_Package.dart';
+import 'package:sri_tel_flutter_web_mob/entities/provisioning/telco_package.dart';
 import 'package:sri_tel_flutter_web_mob/services/package_service.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/special/confirmation_dialog.dart';
 import '../../utils/colors.dart';
