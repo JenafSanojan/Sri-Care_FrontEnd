@@ -10,8 +10,10 @@ class User {
   final String? token;
   final Timestamp? createdAt;
   final Timestamp? lastSignInAt;
-  final bool? isProfileComplete; // tells if the user has completed their profile (email, phone) verification
+  final bool? isProfileComplete;
   final bool isActive;
+  final double voice;
+  final double walletBalance;
 
   User({
     this.uid,
@@ -24,9 +26,12 @@ class User {
     this.lastSignInAt,
     this.isProfileComplete,
     this.isActive = true,
+    // Default to 0.0 if not provided
+    this.voice = 0.0,
+    this.walletBalance = 0.0,
   });
 
-  /// Converts a User instance to a JSON-compatible Map (for APIs, etc).
+  /// Converts a User instance to a JSON-compatible Map.
   Map<String, dynamic> toJson() {
     return {
       '_id': uid,
@@ -39,6 +44,8 @@ class User {
       'lastSignInAt': lastSignInAt?.toDate().toIso8601String(),
       'isProfileComplete': isProfileComplete,
       'isActive': isActive,
+      'voice': voice ?? 0.0,
+      'walletBalance': walletBalance ?? 0.0,
     };
   }
 
@@ -54,10 +61,18 @@ class User {
       photoURL: map['photoURL'] as String?,
       mobileNumber: map['mobileNumber'] as String?,
       token: map['token'] as String?,
-      createdAt: map['createdAt'] is Timestamp ? map['createdAt'] as Timestamp? : (map['createdAt'] != null ? Timestamp.fromDate(DateTime.parse(map['createdAt'] as String)) : null),
-      lastSignInAt: map['lastSignInAt'] is Timestamp ? map['lastSignInAt'] as Timestamp? : (map['lastSignInAt'] != null ? Timestamp.fromDate(DateTime.parse(map['lastSignInAt'] as String)) : null),
+      createdAt: map['createdAt'] is Timestamp
+          ? map['createdAt'] as Timestamp?
+          : (map['createdAt'] != null ? Timestamp.fromDate(DateTime.parse(map['createdAt'] as String)) : null),
+      lastSignInAt: map['lastSignInAt'] is Timestamp
+          ? map['lastSignInAt'] as Timestamp?
+          : (map['lastSignInAt'] != null ? Timestamp.fromDate(DateTime.parse(map['lastSignInAt'] as String)) : null),
       isProfileComplete: map['isProfileComplete'] as bool?,
       isActive: map['isActive'] ?? true,
+      // Handle nulls by defaulting to 0.0.
+      // (map['key'] as num?) ensures it handles both int and double from JSON safeley.
+      voice: map['voice'] != null ? (map['voice'] as num).toDouble() : 0.0,
+      walletBalance: map['voice'] != null ? (map['walletBalance'] as num).toDouble() : 0.0,
     );
   }
 
@@ -65,7 +80,6 @@ class User {
   User copyWith({
     String? uid,
     String? email,
-    String? password,
     String? displayName,
     String? photoURL,
     String? mobileNumber,
@@ -74,6 +88,8 @@ class User {
     Timestamp? lastSignInAt,
     bool? isProfileComplete,
     bool? isActive,
+    double? voice,
+    double? walletBalance,
   }) {
     return User(
       uid: uid ?? this.uid,
@@ -86,11 +102,13 @@ class User {
       lastSignInAt: lastSignInAt ?? this.lastSignInAt,
       isProfileComplete: isProfileComplete ?? this.isProfileComplete,
       isActive: isActive ?? this.isActive,
+      voice: voice ?? this.voice,
+      walletBalance: walletBalance ?? this.walletBalance,
     );
   }
 
   @override
   String toString() {
-    return 'User(uid: $uid, email: $email, displayName: $displayName, token: $token, isActive: $isActive, isProfileComplete: $isProfileComplete)';
+    return 'User(uid: $uid, email: $email, voice: $voice, walletBalance: $walletBalance)';
   }
 }

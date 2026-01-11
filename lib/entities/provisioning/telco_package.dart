@@ -1,58 +1,81 @@
-import 'dart:ui';
-
-
 class TelcoPackage {
+  final String id;
   final String name;
+  final String type;
   final double cost;
   final String description;
-  final int validity; // in days
-  final String type; // 'DATA', 'VOICE', 'SMS', 'COMBO'
-  final Color demoColor; // should be changed to image
+  final int validity;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   TelcoPackage({
+    required this.id,
     required this.name,
+    required this.type,
     required this.cost,
     required this.description,
-    this.validity = 30,
-    this.type = 'DATA',
-    this.demoColor = const Color(0xFFCCCCCC),
+    required this.validity,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory TelcoPackage.fromJson(Map<String, dynamic> json) {
     return TelcoPackage(
+      id: json['_id'] ?? json['id'],
       name: json['name'],
+      type: json['type'],
       cost: (json['cost'] as num).toDouble(),
-      description: json['description'] ?? '',
-      validity: json['validity'] ?? 30,
-      type: json['type'] ?? 'DATA',
+      description: json['description'],
+      validity: json['validity'],
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      '_id': id,
       'name': name,
+      'type': type,
       'cost': cost,
       'description': description,
       'validity': validity,
-      'type': type,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 
+  // Type helpers
+  bool get isData => type == 'data';
+  bool get isVoice => type == 'voice';
+  bool get isVAS => type == 'VAS';
+
   // Display helpers
   String get costDisplay => 'LKR ${cost.toStringAsFixed(2)}';
-  String get validityDisplay => '$validity days';
+  String get validityDisplay => '$validity ${validity == 1 ? 'day' : 'days'}';
+  String get typeDisplay {
+    switch (type) {
+      case 'data':
+        return 'Data Package';
+      case 'voice':
+        return 'Voice Package';
+      case 'VAS':
+        return 'Value Added Service';
+      default:
+        return type;
+    }
+  }
+
   String get typeIcon {
     switch (type) {
-      case 'DATA':
+      case 'data':
         return '📱';
-      case 'VOICE':
+      case 'voice':
         return '📞';
-      case 'SMS':
-        return '💬';
-      case 'COMBO':
-        return '📦';
+      case 'VAS':
+        return '⭐';
       default:
-        return '🎁';
+        return '📦';
     }
   }
 }

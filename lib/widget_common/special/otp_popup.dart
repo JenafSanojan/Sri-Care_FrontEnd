@@ -22,7 +22,8 @@ class OtpPopup extends StatefulWidget {
 
 class _OtpPopupState extends State<OtpPopup> {
   // Controllers for 4 digits
-  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _controllers =
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
 
   // Timer State
@@ -40,8 +41,12 @@ class _OtpPopupState extends State<OtpPopup> {
   @override
   void dispose() {
     _timer?.cancel();
-    for (var c in _controllers) { c.dispose(); }
-    for (var f in _focusNodes) { f.dispose(); }
+    for (var c in _controllers) {
+      c.dispose();
+    }
+    for (var f in _focusNodes) {
+      f.dispose();
+    }
     super.dispose();
   }
 
@@ -64,7 +69,9 @@ class _OtpPopupState extends State<OtpPopup> {
     String otp = _controllers.map((c) => c.text).join();
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please enter the full 6-digit code"), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text("Please enter the full 6-digit code"),
+            backgroundColor: Colors.red),
       );
       return;
     }
@@ -110,7 +117,10 @@ class _OtpPopupState extends State<OtpPopup> {
             // Title
             const Text(
               "Verification Code",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textColorOne),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: textColorOne),
             ),
             const SizedBox(height: 10),
             Text(
@@ -135,12 +145,21 @@ class _OtpPopupState extends State<OtpPopup> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: orangeColor,
                   padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
                 onPressed: _isLoading ? null : _handleVerify,
                 child: _isLoading
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: white, strokeWidth: 2))
-                    : const Text("Verify", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: white)),
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            color: white, strokeWidth: 2))
+                    : const Text("Verify",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: white)),
               ),
             ),
             const SizedBox(height: 20),
@@ -150,7 +169,8 @@ class _OtpPopupState extends State<OtpPopup> {
               onTap: _handleResend,
               child: RichText(
                 text: TextSpan(
-                  text: _canResend ? "Didn't receive code? " : "Resend code in ",
+                  text:
+                      _canResend ? "Didn't receive code? " : "Resend code in ",
                   style: const TextStyle(color: greyColor, fontSize: 14),
                   children: [
                     TextSpan(
@@ -158,7 +178,8 @@ class _OtpPopupState extends State<OtpPopup> {
                       style: TextStyle(
                         color: _canResend ? orangeColor : textColorOne,
                         fontWeight: FontWeight.bold,
-                        decoration: _canResend ? TextDecoration.underline : null,
+                        decoration:
+                            _canResend ? TextDecoration.underline : null,
                       ),
                     ),
                   ],
@@ -181,14 +202,20 @@ class _OtpPopupState extends State<OtpPopup> {
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         maxLength: 1,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: textColorOne),
+        style: const TextStyle(
+            fontSize: 24, fontWeight: FontWeight.bold, color: textColorOne),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
-          counterText: "", // Hide length counter
+          counterText: "",
+          // Hide length counter
           filled: true,
           fillColor: white,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: orangeColor, width: 2)),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: orangeColor, width: 2)),
         ),
         onChanged: (value) {
           if (value.isNotEmpty) {

@@ -1,8 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
+import 'package:sri_tel_flutter_web_mob/services/package_service.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
-import '../../entities/provisioning/telco_package.dart';
+import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
+import '../../entities/provisioning/telco_Package.dart';
 import '../../utils/colors.dart';
 import 'package:get/get.dart';
 
@@ -10,12 +13,31 @@ class PackageSection extends StatelessWidget {
   final String title;
   final List<TelcoPackage> packages;
   final random = Random();
+  // final Function(TelcoPackage package) activatePackageCallback;
 
   PackageSection({
     super.key,
     required this.title,
     required this.packages,
+    // required this.activatePackageCallback,
   });
+
+  void _activatePackage(TelcoPackage package) {
+    PackageService packageService = PackageService();
+    // if(package.isData){
+    //   packageService.activateDataPackage(phoneNumber: GlobalAuthData.instance.user.mobileNumber ?? '', packageId: package.id, balance: balance)
+    // } else if(package.isVoice){
+    //   packageService.activateVoicePackage(phoneNumber: GlobalAuthData.instance.user.mobileNumber ?? '', packageId: package.id, balance: balance)
+    // } else if(package.isVAS){
+    //   packageService.activateVASPackage(phoneNumber: GlobalAuthData.instance.user.mobileNumber ?? '', packageId: package.id, balance: balance)
+    // } else {
+    //   CommonLoaders.errorSnackBar(
+    //       title: "Activation Error",
+    //       duration: 3,
+    //       message: "Unknown package type");
+    //   return;
+    // }
+  }
 
   // --- 1. Define Random/Suitable Colors ---
   static final List<Color> _cardColors = [
@@ -203,7 +225,7 @@ class PackageSection extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () {
-                          Get.to(() => PaymentScreen(package: package));
+                          _activatePackage(package);
                         },
                         child: const Text("Activate Now",
                             style: TextStyle(color: white, fontSize: 16)),

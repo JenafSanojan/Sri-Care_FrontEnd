@@ -8,6 +8,8 @@ import '../../Global/global_configs.dart';
 import 'chat_screen.dart';
 import 'package:get/get.dart';
 
+import 'faq_screen.dart';
+
 class SupportListScreen extends StatefulWidget {
   final bool dontShowBackButton;
 
@@ -101,27 +103,32 @@ class _SupportListScreenState extends State<SupportListScreen> {
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: orangeColor.withValues(alpha: 0.2)),
             ),
-            child: Row(
-              children: [
-                const Icon(Icons.help_outline, size: 40, color: orangeColor),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text("Have a question?",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: textColorOne)),
-                      SizedBox(height: 5),
-                      Text("Check our FAQ for instant answers.",
-                          style: TextStyle(fontSize: 12, color: greyColor)),
-                    ],
+            child: InkWell(
+              onTap: () {
+                Get.to(() => FaqScreen());
+              },
+              child: Row(
+                children: [
+                  const Icon(Icons.help_outline, size: 40, color: orangeColor),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Have a question?",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: textColorOne)),
+                        SizedBox(height: 5),
+                        Text("Check our FAQ for instant answers.",
+                            style: TextStyle(fontSize: 12, color: greyColor)),
+                      ],
+                    ),
                   ),
-                ),
-                const Icon(Icons.arrow_forward_ios, size: 16, color: greyColor),
-              ],
+                  const Icon(Icons.arrow_forward_ios, size: 16, color: greyColor),
+                ],
+              ),
             ),
           ),
 
