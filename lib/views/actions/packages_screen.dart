@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sri_tel_flutter_web_mob/services/package_service.dart';
+import 'package:get/get.dart';
 
-import '../../entities/provisioning/telco_package.dart';
+import '../../entities/provisioning/telco_Package.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/responsive-layout.dart';
 import '../../widget_common/special/package_section.dart';
-import 'package:get/get.dart';
-
 import 'notification_screen.dart';
 
-class PackagesScreen extends StatelessWidget {
+class PackagesScreen extends StatefulWidget {
   final VoidCallback? drawerCallback;
   final bool dontShowBackButton;
 
@@ -16,117 +16,135 @@ class PackagesScreen extends StatelessWidget {
       {Key? key, this.drawerCallback, this.dontShowBackButton = false})
       : super(key: key);
 
-  // Sample Data Generation
-  final List<TelcoPackage> frequentPacks = [
-    TelcoPackage(
-        name: "1.2 GB Anytime",
-        description: "Valid for 10 Days. Best for light browsing.",
-        cost: 119,
-        validity: 10,
-        demoColor: Colors.brown),
-    TelcoPackage(
-        name: "2.8 GB Anytime",
-        description: "Valid for 21 Days. Great for students.",
-        cost: 239,
-        validity: 21,
-        demoColor: Colors.green),
-    TelcoPackage(
-        name: "5 GB Work",
-        description: "Valid for 30 Days. 8AM to 5PM.",
-        validity: 30,
-        cost: 450,
-        demoColor: Colors.blueAccent),
-  ];
+  @override
+  State<PackagesScreen> createState() => _PackagesScreenState();
+}
 
-  final List<TelcoPackage> hotSellers = [
-    TelcoPackage(
-        name: "Unlimited Calls",
-        description: "Any Network Calls + Free 3GB. Valid for 30 days.",
-        cost: 351,
-        validity: 30,
-        demoColor: Colors.black87),
-    TelcoPackage(
-        name: "Super Combo",
-        description: "Non-stop Social Media + 30GB. Valid for 30 days.",
-        cost: 479,
-        validity: 30,
-        demoColor: Colors.teal),
-  ];
+class _PackagesScreenState extends State<PackagesScreen> {
+  List<TelcoPackage> voicePackages = [];
+  List<TelcoPackage> dataPackages = [];
 
-  final List<TelcoPackage> unlimitedPlans = [
-    TelcoPackage(
-        name: "Non-Stop YouTube",
-        description: "Unlimited YouTube 360p + 1GB Extra. Valid for 30 days.",
-        cost: 250,
-        validity: 30,
-        demoColor: Colors.redAccent),
-    TelcoPackage(
-        name: "Gaming Blaster",
-        description: "Low ping for PUBG/FreeFire. Valid for 30 days.",
-        cost: 500,
-        validity: 30,
-        demoColor: Colors.deepPurple),
-  ];
+  void _loadPackages() async {
+    final loadedVoicePackages = await PackageService().getVoicePackages() ?? [];
+    final loadedDataPackages = await PackageService().getDataPackages() ?? [];
+
+    setState(() {
+      voicePackages = loadedVoicePackages;
+      dataPackages = loadedDataPackages;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPackages();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayout(
-      mobileBody: Scaffold(
-        backgroundColor: lightYellow,
-        appBar: AppBar(
-          backgroundColor: orangeColor,
-          title: const Text("Packages",
-              style: TextStyle(color: white, fontWeight: FontWeight.w700)),
-          elevation: 0,
-          centerTitle: true,
-          leading: dontShowBackButton
-              ? SizedBox()
-              : IconButton(
-                  icon: const Icon(Icons.arrow_back, color: white),
-                  onPressed: Get.back),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NotificationScreen()));
-                },
-                icon: const Icon(Icons.mail, color: white)),
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.only(top: 10, bottom: 30),
-          children: [
-            PackageSection(title: "Internet Packages", packages: frequentPacks),
-            PackageSection(title: "Voice Packages", packages: hotSellers),
-          ],
-        ),
-      ),
-      webBody: Container(
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: Scaffold(
+    return DefaultTabController(
+      length: 2,
+      child: ResponsiveLayout(
+        mobileBody: Scaffold(
           backgroundColor: lightYellow,
           appBar: AppBar(
-            title: Text("Packages",
-                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
             backgroundColor: orangeColor,
+            title: const Text("Packages",
+                style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+            elevation: 0,
             centerTitle: true,
+            leading: widget.dontShowBackButton
+                ? SizedBox()
+                : IconButton(
+                icon: const Icon(Icons.arrow_back, color: white),
+                onPressed: Get.back),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NotificationScreen()));
+                  },
+                  icon: const Icon(Icons.mail, color: white)),
+            ],
+            // Added TabBar
+            bottom: const TabBar(
+              indicatorColor: white,
+              indicatorSize: TabBarIndicatorSize.tab,
+              labelColor: white,
+              unselectedLabelColor: Colors.white70,
+              tabs: [
+                Tab(text: "Internet"),
+                Tab(text: "Voice"),
+              ],
+            ),
           ),
-          body: Center(
-            child: Container(
-              width: 800, // Constrain width for web
-              color: white,
-              child: ListView(
-                padding: const EdgeInsets.all(40),
+          // Changed to TabBarView
+          body: TabBarView(
+            children: [
+              // Tab 1: Internet Packages
+              ListView(
+                padding: const EdgeInsets.only(top: 10, bottom: 30),
                 children: [
                   PackageSection(
-                      title: "Data Packages",
-                      packages: frequentPacks),
-                  const SizedBox(height: 30),
-                  PackageSection(
-                      title: "Voice Packages", packages: unlimitedPlans),
+                      title: "Internet Packages", packages: dataPackages),
                 ],
+              ),
+              // Tab 2: Voice Packages
+              ListView(
+                padding: const EdgeInsets.only(top: 10, bottom: 30),
+                children: [
+                  PackageSection(
+                      title: "Voice Packages", packages: voicePackages),
+                ],
+              ),
+            ],
+          ),
+        ),
+        webBody: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          child: Scaffold(
+            backgroundColor: lightYellow,
+            appBar: AppBar(
+              title: Text("Packages",
+                  style: TextStyle(color: white, fontWeight: FontWeight.w700)),
+              backgroundColor: orangeColor,
+              centerTitle: true,
+              // Added TabBar for Web as well for consistency
+              bottom: const TabBar(
+                indicatorColor: white,
+                labelColor: white,
+                unselectedLabelColor: Colors.white70,
+                tabs: [
+                  Tab(text: "Data"),
+                  Tab(text: "Voice"),
+                ],
+              ),
+            ),
+            body: Center(
+              child: Container(
+                width: 800,
+                color: white,
+                // Changed to TabBarView
+                child: TabBarView(
+                  children: [
+                    ListView(
+                      padding: const EdgeInsets.all(40),
+                      children: [
+                        PackageSection(
+                            title: "Data Packages", packages: dataPackages),
+                      ],
+                    ),
+                    ListView(
+                      padding: const EdgeInsets.all(40),
+                      children: [
+                        PackageSection(
+                            title: "Voice Packages", packages: voicePackages),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

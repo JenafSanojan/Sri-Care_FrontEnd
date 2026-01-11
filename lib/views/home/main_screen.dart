@@ -9,7 +9,7 @@ import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/pending_bills_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/chat/support_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/dashboard.dart';
-import 'package:sri_tel_flutter_web_mob/views/profile/services_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/actions/services_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 import 'package:get/get.dart';
 
