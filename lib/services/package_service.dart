@@ -6,7 +6,7 @@ import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
 import '../../controllers/network_manager.dart';
 import '../../entities/error.dart';
 import '../entities/provisioning/package_activation_response.dart';
-import '../entities/provisioning/telco_Package.dart';
+import '../entities/provisioning/telco_package.dart';
 import '../entities/provisioning/user_active_packages.dart';
 
 /// Service for managing packages (data, voice, VAS)
