@@ -66,7 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
       customerName: customerName,
     );
 
-    setState(() => _connectionStatus = "Connected");
+    setState(() => _connectionStatus = "Our agents are busy right now. Come back after a week.");//"Connected");
 
     // 3. Setup Listeners
     _socketService.onMessageReceived.listen((message) {
@@ -153,7 +153,7 @@ class _ChatScreenState extends State<ChatScreen> {
       mobileBody: _buildChatInterface(isWeb: false),
       webBody: Center(
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 800),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: _buildChatInterface(isWeb: true),
         ),
       ),
@@ -232,7 +232,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       // Logic to stop typing could be added with a debounce timer
                     },
                     decoration: InputDecoration(
-                      hintText: "Type your message...",
+                      hintText: "All our agents are busy, come back later...",//"Type your message...",
                       filled: true,
                       fillColor: lightYellow,
                       border: OutlineInputBorder(
