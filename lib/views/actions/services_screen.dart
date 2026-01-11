@@ -41,20 +41,22 @@ class _ServicesScreenState extends State<ServicesScreen>
     // }
   }
 
-  void activateService(TelcoPackage service) {
-    ConfirmationDialog.show(
+  void activateService(TelcoPackage service) async {
+    bool? res = await ConfirmationDialog.show(
       title: "Activate Service",
-      message: "Are you sure you want to activate ${service.name}?",
+      message: "Do you want to activate ${service.name} for LKR ${service.cost.toStringAsFixed(0)}?",
     );
+    if(res != true) return;
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("${service.name} Activated")));
   }
 
-  void deactivateService(TelcoPackage service) {
-   ConfirmationDialog.show(
+  void deactivateService(TelcoPackage service) async {
+   bool? res = await ConfirmationDialog.show(
       title: "Deactivate Service",
       message: "Are you sure you want to deactivate ${service.name}?",
     );
+    if(res != true) return;
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("${service.name} Deactivated")));
   }
