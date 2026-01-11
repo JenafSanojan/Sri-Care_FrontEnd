@@ -5,6 +5,7 @@ import 'package:sri_tel_flutter_web_mob/entities/packageBilling/bill.dart';
 import 'package:sri_tel_flutter_web_mob/entities/packageBilling/payment_response.dart';
 import 'package:sri_tel_flutter_web_mob/entities/provisioning/telco_package.dart';
 import 'package:sri_tel_flutter_web_mob/services/payment_service.dart';
+import 'package:sri_tel_flutter_web_mob/views/billing/payment_status_screens.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/main_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
 import '../../utils/colors.dart';
@@ -134,9 +135,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
         .confirmPayment(
             providerRef: "${progressingPayment.transaction.providerRef}",
             otp: otp)
-        .then((confirmResponse) {
+        .then((confirmResponse) async {
       if (confirmResponse == null ||
           confirmResponse.transaction.isCompleted == false) {
+        await Get.to(() => PaymentFailedScreen(
+              amount: progressingPayment.transaction.amount,
+            ));
         // Error handled in service
         return;
       } else {
@@ -144,12 +148,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
         if (mounted) {
           Navigator.of(context).pop(); // Close OTP dialog
           // Get.back(); // Close payment screen
-          Get.offAll(() => MainScreen());
           CommonLoaders.successSnackBar(
               title: "Payment Successful",
               duration: 3,
               message: "Your payment was completed successfully.");
         }
+        await Get.to(() => PaymentSuccessScreen(
+              amount: progressingPayment.transaction.amount,
+            ));
+        Get.offAll(() => MainScreen());
       }
     });
   }
@@ -181,7 +188,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         _isShowLoadingWidget = true;
       });
     }
-    try{
+    try {
       // Validate and Process Payment
       if (_amountController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -237,7 +244,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           showOtpValidation(context, paymentResponse);
         }
       }
-    } catch (ex){
+    } catch (ex) {
       print("Error during payment: $ex");
       CommonLoaders.errorSnackBar(
           title: "Payment Error",
