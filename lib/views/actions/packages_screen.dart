@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sri_tel_flutter_web_mob/services/package_service.dart';
 import 'package:get/get.dart';
 
-import '../../entities/provisioning/telco_Package.dart';
+import '../../entities/provisioning/telco_package.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/responsive-layout.dart';
 import '../../widget_common/special/package_section.dart';

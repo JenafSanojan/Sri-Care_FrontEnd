@@ -3,7 +3,7 @@ import 'package:flutter/services.dart'; // For input formatters
 import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/entities/packageBilling/bill.dart';
 import 'package:sri_tel_flutter_web_mob/entities/packageBilling/payment_response.dart';
-import 'package:sri_tel_flutter_web_mob/entities/provisioning/telco_Package.dart';
+import 'package:sri_tel_flutter_web_mob/entities/provisioning/telco_package.dart';
 import 'package:sri_tel_flutter_web_mob/services/payment_service.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/payment_status_screens.dart';
 import 'package:sri_tel_flutter_web_mob/views/home/main_screen.dart';
