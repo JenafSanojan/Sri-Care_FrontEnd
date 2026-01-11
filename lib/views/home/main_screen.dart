@@ -3,6 +3,7 @@ import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/utils/colors.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/about_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/actions/notification_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/settings.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/payment_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/billing/pending_bills_screen.dart';
@@ -74,6 +75,10 @@ class _MainScreenState extends State<MainScreen> {
       dontShowBackButton: true,
     )),
     Center(
+        child: NotificationScreen(
+      dontShowBackButton: true,
+    )),
+    Center(
         child: SettingsScreen(
       dontShowBackButton: true,
     )),
@@ -92,6 +97,7 @@ class _MainScreenState extends State<MainScreen> {
     Center(child: PendingBillsScreen()),
     Center(child: BillingHistoryScreen()),
     Center(child: SupportListScreen()),
+    Center(child: NotificationScreen()),
     Center(child: SettingsScreen()),
     // Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
     Center(child: AboutScreen()),
@@ -130,6 +136,7 @@ class _MainScreenState extends State<MainScreen> {
     MenuItem(icon: Icons.pending, title: 'Pending Bills'),
     MenuItem(icon: Icons.gas_meter, title: 'Usage History'),
     MenuItem(icon: Icons.support, title: 'Get Support'),
+    MenuItem(icon: Icons.notifications, title: 'Notifications'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
     // MenuItem(icon: Icons.person, title: 'Profile'),
     MenuItem(icon: Icons.info, title: 'About'),

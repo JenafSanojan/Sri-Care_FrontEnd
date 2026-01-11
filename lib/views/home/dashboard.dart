@@ -155,7 +155,7 @@ class MobileDashboard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Call & Data Usage",
+                      const Text("Wallet & Voice Balance",
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -165,15 +165,16 @@ class MobileDashboard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           buildCircularIndicator(
-                              title: "Voice",
-                              value: "200",
-                              unit: "Mins",
-                              percent: 0.4),
+                              title: "Mobile Balance",
+                              value:
+                                  "${GlobalAuthData.instance.user.walletBalance}",
+                              unit: "Rs.",
+                              percent: 0.0),
                           buildCircularIndicator(
-                              title: "Data",
-                              value: "45.6",
-                              unit: "GB",
-                              percent: 0.7),
+                              title: "Voice Usage",
+                              value: "${GlobalAuthData.instance.user.voice}",
+                              unit: "Mins",
+                              percent: GlobalAuthData.instance.user.voice == 0 ? 0.0 : 0.4),
                         ],
                       ),
                     ],
@@ -252,7 +253,8 @@ class WebDashboard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("greetings, ${GlobalAuthData.instance.user.displayName}",//"Good Morning,",
+                      Text(
+                          "greetings, ${GlobalAuthData.instance.user.displayName}", //"Good Morning,",
                           style: TextStyle(color: white, fontSize: 18)),
                       Text("${GlobalAuthData.instance.user.mobileNumber}",
                           style: TextStyle(
@@ -273,9 +275,9 @@ class WebDashboard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("Connection Status",//"Current Package",
+                        Text("Connection Status", //"Current Package",
                             style: TextStyle(color: white, fontSize: 14)),
-                        Text("Active",//"Super 4G Blaster",
+                        Text("Active", //"Super 4G Blaster",
                             style: TextStyle(
                                 color: Colors.green.withAlpha(200),
                                 fontSize: 24,
@@ -307,21 +309,22 @@ class WebDashboard extends StatelessWidget {
                         color: white, borderRadius: BorderRadius.circular(20)),
                     child: Column(
                       children: [
-                        const Text("Voice Usage",
+                        const Text("Mobile Balance",
                             style: TextStyle(fontSize: 18, color: greyColor)),
                         const Spacer(),
                         // Using the shared helper with larger dimensions if needed,
                         // but standard size works well centered
                         buildCircularIndicator(
                             title: "",
-                            value: "200",
-                            unit: "Mins",
-                            percent: 0.4,
+                            value:
+                                "${GlobalAuthData.instance.user.walletBalance}",
+                            unit: "Rs.",
+                            percent: 0.0,
                             height: 80,
                             width: 80),
                         const Spacer(),
-                        const Text("450 Mins Left",
-                            style: TextStyle(
+                        Text("Rs. ${GlobalAuthData.instance.user.walletBalance}",
+                            style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
                                 color: textColorOne)),
@@ -339,18 +342,18 @@ class WebDashboard extends StatelessWidget {
                         color: white, borderRadius: BorderRadius.circular(20)),
                     child: Column(
                       children: [
-                        const Text("Data Usage",
+                        const Text("Voice Usage",
                             style: TextStyle(fontSize: 18, color: greyColor)),
                         const Spacer(),
                         buildCircularIndicator(
                             title: "",
-                            value: "45.6",
-                            unit: "GB",
-                            percent: 0.7,
+                            value: "${GlobalAuthData.instance.user.voice}",
+                            unit: "Mins",
+                            percent: GlobalAuthData.instance.user.voice == 0 ? 0.0 : 0.4,
                             width: 80,
                             height: 80),
                         const Spacer(),
-                        const Text("12.5 GB Left",
+                        Text("${GlobalAuthData.instance.user.voice} Mins Left",
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

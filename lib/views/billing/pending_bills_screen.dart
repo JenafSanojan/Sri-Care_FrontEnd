@@ -9,9 +9,10 @@ import '../../services/billing_service.dart'; // For payment navigation
 
 class PendingBillsScreen extends StatefulWidget {
   final bool dontShowBackButton;
-  const PendingBillsScreen(
-      {super.key, this.dontShowBackButton = false,});
-
+  const PendingBillsScreen({
+    super.key,
+    this.dontShowBackButton = false,
+  });
 
   @override
   State<PendingBillsScreen> createState() => _PendingBillsScreenState();
@@ -21,6 +22,7 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
   final BillingService _billingService = BillingService();
 
   List<Bill> _pendingBills = [];
+  List<Bill> _historyBills = []; // List for Paid bills
   bool _isLoading = true;
   double _totalOutstanding = 0.0;
 
@@ -37,18 +39,30 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
 
     if (mounted) {
       if (allBills != null) {
-        // Filter for bills that are NOT paid
-        // Adjust status strings based on your actual API response (e.g., "PENDING", "Overdue")
+        // 1. Filter Pending/Overdue
         final unpaid = allBills.where((bill) {
           final status = bill.status.toUpperCase();
           return status != 'PAID' && status != 'COMPLETED';
         }).toList();
 
-        // Sort: Overdue/Oldest first
-        unpaid.sort((a, b) => (a.createdAt ?? DateTime.now()).compareTo(b.createdAt ?? DateTime.now()));
+        // 2. Filter Paid/History
+        final paid = allBills.where((bill) {
+          final status = bill.status.toUpperCase();
+          return status == 'PAID' || status == 'COMPLETED';
+        }).toList();
+
+        // Sort: Overdue/Oldest first for pending
+        unpaid.sort((a, b) => (a.createdAt ?? DateTime.now())
+            .compareTo(b.createdAt ?? DateTime.now()));
+
+        // Sort: Newest first for history
+        paid.sort((a, b) => (b.createdAt ?? DateTime.now())
+            .compareTo(a.createdAt ?? DateTime.now()));
 
         setState(() {
           _pendingBills = unpaid;
+          _historyBills = paid;
+          // Calculate total only for unpaid bills as requested
           _totalOutstanding = unpaid.fold(0, (sum, item) => sum + item.amount);
           _isLoading = false;
         });
@@ -81,22 +95,23 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
       appBar: AppBar(
         backgroundColor: orangeColor,
         elevation: 0,
-        leading: IconButton(
+        leading: widget.dontShowBackButton
+            ? null
+            : IconButton(
           icon: const Icon(Icons.arrow_back, color: white),
           onPressed: () => Get.back(),
         ),
-        title: const Text("Pending Payments",
+        title: const Text("My Bills",
             style: TextStyle(color: white, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: orangeColor))
-          : RefreshIndicator(
-        color: orangeColor,
-        onRefresh: _fetchBills,
+          : DefaultTabController(
+        length: 2,
         child: Column(
           children: [
-            // --- 1. TOTAL OUTSTANDING SUMMARY ---
+            // --- 1. TOTAL OUTSTANDING SUMMARY (Unchanged) ---
             if (_pendingBills.isNotEmpty)
               Container(
                 width: double.infinity,
@@ -121,39 +136,80 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
                   children: [
                     const Text(
                       "Total Outstanding",
-                      style: TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       "LKR ${_totalOutstanding.toStringAsFixed(2)}",
-                      style: const TextStyle(color: white, fontSize: 32, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 15),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         "${_pendingBills.length} Bills Due",
-                        style: const TextStyle(color: white, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
                 ),
               ),
 
-            // --- 2. BILL LIST ---
+            // --- 2. TABS ---
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: orangeColor.withValues(alpha: 0.2)),
+              ),
+              child: TabBar(
+                indicator: BoxDecoration(
+                  color: orangeColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                labelColor: white,
+                unselectedLabelColor: greyColor,
+                tabs: const [
+                  Tab(text: "Pending"),
+                  Tab(text: "History"),
+                ],
+                indicatorSize: TabBarIndicatorSize.tab,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            // --- 3. TAB VIEW (BILL LISTS) ---
             Expanded(
-              child: _pendingBills.isEmpty
-                  ? _buildEmptyState()
-                  : ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                itemCount: _pendingBills.length,
-                itemBuilder: (context, index) {
-                  return _buildBillCard(_pendingBills[index]);
-                },
+              child: TabBarView(
+                children: [
+                  // Tab 1: Pending List
+                  _pendingBills.isEmpty
+                      ? _buildEmptyState("No Pending Payments!",
+                      "You are all caught up.")
+                      : _buildBillList(_pendingBills, isHistory: false),
+
+                  // Tab 2: History List
+                  _historyBills.isEmpty
+                      ? _buildEmptyState("No History Found",
+                      "You haven't paid any bills yet.")
+                      : _buildBillList(_historyBills, isHistory: true),
+                ],
               ),
             ),
           ],
@@ -162,11 +218,33 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
     );
   }
 
-  Widget _buildBillCard(Bill bill) {
-    bool isOverdue = bill.status.toUpperCase() == 'OVERDUE';
-    Color statusColor = isOverdue ? Colors.red : orangeColor;
+  // Helper method to build the list
+  Widget _buildBillList(List<Bill> bills, {required bool isHistory}) {
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      itemCount: bills.length,
+      itemBuilder: (context, index) {
+        return _buildBillCard(bills[index], isHistory: isHistory);
+      },
+    );
+  }
 
-    // Formatting date (Using basic string splitting if intl not available, or simpler logic)
+  Widget _buildBillCard(Bill bill, {required bool isHistory}) {
+    // Determine Status Colors and Text
+    bool isOverdue = bill.status.toUpperCase() == 'OVERDUE';
+    bool isPaid = bill.status.toUpperCase() == 'PAID' ||
+        bill.status.toUpperCase() == 'COMPLETED';
+
+    Color statusColor;
+    if (isPaid) {
+      statusColor = Colors.green;
+    } else if (isOverdue) {
+      statusColor = Colors.red;
+    } else {
+      statusColor = orangeColor;
+    }
+
+    // Formatting date
     String dateStr = bill.createdAt != null
         ? "${bill.createdAt!.year}-${bill.createdAt!.month.toString().padLeft(2, '0')}-${bill.createdAt!.day.toString().padLeft(2, '0')}"
         : "Unknown Date";
@@ -184,7 +262,9 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
             offset: const Offset(0, 4),
           ),
         ],
-        border: isOverdue ? Border.all(color: Colors.red.withValues(alpha: 0.3), width: 1) : null,
+        border: isOverdue
+            ? Border.all(color: Colors.red.withValues(alpha: 0.3), width: 1)
+            : null,
       ),
       child: Column(
         children: [
@@ -197,25 +277,32 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
                 children: [
                   Text(
                     bill.billingMonth.toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: textColorOne),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: textColorOne),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "Bill #${bill.id.substring(bill.id.length - 6)}", // Show last 6 chars of ID
+                    "Bill #${bill.id.substring(bill.id.length - 6)}",
                     style: const TextStyle(color: greyColor, fontSize: 12),
                   ),
                 ],
               ),
               // Right: Status Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   bill.status.toUpperCase(),
-                  style: TextStyle(color: statusColor, fontWeight: FontWeight.bold, fontSize: 11),
+                  style: TextStyle(
+                      color: statusColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11),
                 ),
               ),
             ],
@@ -232,27 +319,40 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Due Amount", style: TextStyle(fontSize: 12, color: greyColor)),
+                  Text(isHistory ? "Amount Paid" : "Due Amount",
+                      style: const TextStyle(fontSize: 12, color: greyColor)),
                   const SizedBox(height: 5),
                   Text(
                     "LKR ${bill.amount.toStringAsFixed(2)}",
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textColorOne),
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: textColorOne),
                   ),
                   const SizedBox(height: 5),
-                  Text("Generated: $dateStr", style: const TextStyle(fontSize: 11, color: greyColor)),
+                  Text("Generated: $dateStr",
+                      style: const TextStyle(fontSize: 11, color: greyColor)),
                 ],
               ),
-              // Pay Button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: statusColor,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
-                  elevation: 2,
+              // Pay Button (Only show if NOT history)
+              if (!isHistory)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: statusColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 12),
+                    elevation: 2,
+                  ),
+                  onPressed: () => _handlePayBill(bill),
+                  child: const Text("Pay Now",
+                      style: TextStyle(
+                          color: white, fontWeight: FontWeight.bold)),
                 ),
-                onPressed: () => _handlePayBill(bill),
-                child: const Text("Pay Now", style: TextStyle(color: white, fontWeight: FontWeight.bold)),
-              ),
+              // Optional: Show Checkmark for history
+              if (isHistory)
+                const Icon(Icons.check_circle, color: Colors.green, size: 30),
             ],
           ),
         ],
@@ -260,20 +360,25 @@ class _PendingBillsScreenState extends State<PendingBillsScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(String title, String subtitle) {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Container(
-        height: 400,
+        height: 300,
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
-            SizedBox(height: 20),
-            Text("No Pending Payments!", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textColorOne)),
-            SizedBox(height: 10),
-            Text("You are all caught up.", style: TextStyle(color: greyColor)),
+          children: [
+            const Icon(Icons.assignment_turned_in_outlined,
+                size: 80, color: greyColor),
+            const SizedBox(height: 20),
+            Text(title,
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: textColorOne)),
+            const SizedBox(height: 10),
+            Text(subtitle, style: const TextStyle(color: greyColor)),
           ],
         ),
       ),

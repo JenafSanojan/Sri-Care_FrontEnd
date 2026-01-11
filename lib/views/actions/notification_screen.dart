@@ -5,7 +5,8 @@ import 'package:sri_tel_flutter_web_mob/utils/colors.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+  final bool dontShowBackButton;
+  const NotificationScreen({super.key, this.dontShowBackButton = false});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -108,7 +109,7 @@ class _NotificationScreenState extends State<NotificationScreen> with SingleTick
       appBar: AppBar(
         backgroundColor: orangeColor,
         elevation: 0,
-        leading: IconButton(
+        leading: widget.dontShowBackButton ? SizedBox() : IconButton(
           icon: const Icon(Icons.arrow_back, color: white),
           onPressed: () => Navigator.pop(context),
         ),
