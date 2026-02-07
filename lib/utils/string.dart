@@ -1,6 +1,6 @@
 
 class AppConstants{
-  static const String version = "Version 3.0.0";
+  static const String version = "Version 4.0.1";
 
 // login page and SignUp page texts .......................................
   static const String login = "Sign In";

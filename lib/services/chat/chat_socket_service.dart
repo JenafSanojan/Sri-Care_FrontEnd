@@ -41,11 +41,15 @@ class ChatSocketService {
     }
 
     final socketUrl = NetworkConfigs.getBaseUrl();
+    final headers = NetworkConfigs.getHeaders();
 
-    _socket = io.io(socketUrl, <String, dynamic>{
-      'transports': ['websocket', 'polling'],
-      'autoConnect': false,
-    });
+    _socket = io.io( socketUrl,
+        io.OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .setAuth({'authorization': "headers['Authorization']" })
+            .build()
+    );
 
     _setupListeners();
     _socket!.connect();

@@ -33,7 +33,7 @@ class _SupportListScreenState extends State<SupportListScreen> {
   // Check if we have history for the default customer room
   Future<void> _fetchLastConversation() async {
     try {
-      final user = GlobalAuthData.instance.user;
+      final user = GlobalAuthConfigs.instance.user;
       if (user.uid == null) return;
 
       // Based on your socket logic, customer room is 'room_UID'
