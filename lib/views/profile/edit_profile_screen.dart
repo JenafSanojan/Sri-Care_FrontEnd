@@ -23,7 +23,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    final user = GlobalAuthData.instance.user;
+    final user = GlobalAuthConfigs.instance.user;
 
     // Initialize controllers with current data
     _nameController = TextEditingController(text: user.displayName ?? "");

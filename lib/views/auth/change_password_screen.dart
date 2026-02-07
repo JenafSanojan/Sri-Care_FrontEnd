@@ -48,12 +48,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         isChangingPassword = true;
       });
     }
-    if (GlobalAuthData.isInitialized == false) {
+    if (GlobalAuthConfigs.isInitialized == false) {
       print("GlobalAuthData is not initialized");
       return;
     }
     if (passwordsMatch() && passwordIsValid()) {
-      controller.changePassword(user: GlobalAuthData.instance.user,
+      controller.changePassword(user: GlobalAuthConfigs.instance.user,
           currentPassword: oldPasswordController.text,
           newPassword: newPasswordController.text);
     } else {

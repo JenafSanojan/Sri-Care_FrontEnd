@@ -23,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     try {
-      _currentUser = GlobalAuthData.instance.user;
+      _currentUser = GlobalAuthConfigs.instance.user;
     } catch (e) {
       // Fallback for UI testing if GlobalAuthData isn't initialized
       _currentUser = User(

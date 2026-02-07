@@ -167,7 +167,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       context: context,
       barrierDismissible: false, // User must verify or close explicitly
       builder: (context) => OtpPopup(
-        phoneNumber: "${GlobalAuthData.instance.user.mobileNumber}",
+        phoneNumber: "${GlobalAuthConfigs.instance.user.mobileNumber}",
         onResend: () async {
           // paymentService.
           CommonLoaders.successSnackBar(

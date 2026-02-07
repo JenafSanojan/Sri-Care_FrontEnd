@@ -178,7 +178,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    if (GlobalAuthData.isInitialized == false) { // initializing it in splash for now, but this is a fallback and secure way
+    if (GlobalAuthConfigs.isInitialized == false) { // initializing it in splash for now, but this is a fallback and secure way
       print("global auth not initialized, re verifying login");
       controller.reVerifyLogin();
     } else {

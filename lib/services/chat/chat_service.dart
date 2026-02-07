@@ -12,9 +12,9 @@ import '../../../entities/error.dart';
 /// Note: For real-time messaging, use Socket.IO client separately
 /// This service provides REST endpoints for history and session management
 class ChatService {
-  final String _servicePath = '${NetworkConfigs.getBaseUrl()}/api/chat';
-  final String _sessionPath = '${NetworkConfigs.getBaseUrl()}/api/sessions';
-  final String _queuePath = '${NetworkConfigs.getBaseUrl()}/api/queue';
+  final String _servicePath = '${NetworkConfigs.getBaseUrl()}/api/chat/api/chat';
+  final String _sessionPath = '${NetworkConfigs.getBaseUrl()}/api/chat/api/sessions';
+  final String _queuePath = '${NetworkConfigs.getBaseUrl()}/api/chat/api/queue';
 
   /// Get chat history for a specific room
   Future<List<ChatMessage>?> getChatHistory(String roomId) async {

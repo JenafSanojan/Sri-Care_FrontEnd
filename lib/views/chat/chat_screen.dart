@@ -43,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _initializeChat() async {
-    final user = GlobalAuthData.instance.user;
+    final user = GlobalAuthConfigs.instance.user;
     final String customerId = user.uid ?? "guest";
     final String customerName = user.displayName ?? "Guest User";
     final String roomId = 'room_$customerId';
@@ -104,7 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (text.isEmpty) return;
 
     // Optimistically add message to UI
-    final user = GlobalAuthData.instance.user;
+    final user = GlobalAuthConfigs.instance.user;
     final tempMessage = ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(), // Temp ID
       roomId: _socketService.currentRoomId ?? 'room_${user.uid}',
