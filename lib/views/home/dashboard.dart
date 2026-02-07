@@ -84,11 +84,11 @@ class MobileDashboard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              "Greetings, ${GlobalAuthData.instance.user.displayName}",
+                              "Greetings, ${GlobalAuthConfigs.instance.user.displayName}",
                               style:
                                   const TextStyle(color: white, fontSize: 16)),
                           const SizedBox(height: 5),
-                          Text("${GlobalAuthData.instance.user.mobileNumber}",
+                          Text("${GlobalAuthConfigs.instance.user.mobileNumber}",
                               style: TextStyle(
                                   color: white,
                                   fontSize: 24,
@@ -167,14 +167,14 @@ class MobileDashboard extends StatelessWidget {
                           buildCircularIndicator(
                               title: "Mobile Balance",
                               value:
-                                  "${GlobalAuthData.instance.user.walletBalance}",
+                                  "${GlobalAuthConfigs.instance.user.walletBalance}",
                               unit: "Rs.",
                               percent: 0.0),
                           buildCircularIndicator(
                               title: "Voice Usage",
-                              value: "${GlobalAuthData.instance.user.voice}",
+                              value: "${GlobalAuthConfigs.instance.user.voice}",
                               unit: "Mins",
-                              percent: GlobalAuthData.instance.user.voice == 0 ? 0.0 : 0.4),
+                              percent: GlobalAuthConfigs.instance.user.voice == 0 ? 0.0 : 0.4),
                         ],
                       ),
                     ],
@@ -254,9 +254,9 @@ class WebDashboard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                          "greetings, ${GlobalAuthData.instance.user.displayName}", //"Good Morning,",
+                          "greetings, ${GlobalAuthConfigs.instance.user.displayName}", //"Good Morning,",
                           style: TextStyle(color: white, fontSize: 18)),
-                      Text("${GlobalAuthData.instance.user.mobileNumber}",
+                      Text("${GlobalAuthConfigs.instance.user.mobileNumber}",
                           style: TextStyle(
                               color: white,
                               fontSize: 32,
@@ -317,13 +317,13 @@ class WebDashboard extends StatelessWidget {
                         buildCircularIndicator(
                             title: "",
                             value:
-                                "${GlobalAuthData.instance.user.walletBalance}",
+                                "${GlobalAuthConfigs.instance.user.walletBalance}",
                             unit: "Rs.",
                             percent: 0.0,
                             height: 80,
                             width: 80),
                         const Spacer(),
-                        Text("Rs. ${GlobalAuthData.instance.user.walletBalance}",
+                        Text("Rs. ${GlobalAuthConfigs.instance.user.walletBalance}",
                             style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -347,13 +347,13 @@ class WebDashboard extends StatelessWidget {
                         const Spacer(),
                         buildCircularIndicator(
                             title: "",
-                            value: "${GlobalAuthData.instance.user.voice}",
+                            value: "${GlobalAuthConfigs.instance.user.voice}",
                             unit: "Mins",
-                            percent: GlobalAuthData.instance.user.voice == 0 ? 0.0 : 0.4,
+                            percent: GlobalAuthConfigs.instance.user.voice == 0 ? 0.0 : 0.4,
                             width: 80,
                             height: 80),
                         const Spacer(),
-                        Text("${GlobalAuthData.instance.user.voice} Mins Left",
+                        Text("${GlobalAuthConfigs.instance.user.voice} Mins Left",
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

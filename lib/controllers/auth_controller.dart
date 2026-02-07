@@ -59,8 +59,8 @@ class AuthController extends GetxController {
     }
   }
   void setAuthGlobals(User user) {
-    if (GlobalAuthData.isInitialized == false) {
-      GlobalAuthData.initialize(user);
+    if (GlobalAuthConfigs.isInitialized == false) {
+      GlobalAuthConfigs.initialize(user);
     }
   }
 
@@ -167,7 +167,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
-    GlobalAuthData.clear();
+    GlobalAuthConfigs.clear();
     await localStorage.erase();
     Get.offAll(() => LoginScreen());
   }
@@ -208,7 +208,7 @@ class AuthController extends GetxController {
             message: "Make sure you're connected and try again");
         return;
       }
-      if(GlobalAuthData.isInitialized == false){
+      if(GlobalAuthConfigs.isInitialized == false){
         throw Exception("User not logged in");
       }
       bool? isChanged = await userApiService.changePassword(user, currentPassword, newPassword);
