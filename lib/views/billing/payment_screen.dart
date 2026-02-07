@@ -17,12 +17,16 @@ import 'package:get/get.dart';
 import '../../widget_common/special/otp_popup.dart';
 
 class PaymentScreen extends StatefulWidget {
+  final VoidCallback? drawerCallback;
   final bool dontShowBackButton;
   final TelcoPackage? package;
   final Bill? bill;
 
   const PaymentScreen(
-      {super.key, this.dontShowBackButton = false, this.package, this.bill});
+      {Key? key, this.drawerCallback, this.dontShowBackButton = false,  this.package, this.bill})
+      : super(key: key);
+
+
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
