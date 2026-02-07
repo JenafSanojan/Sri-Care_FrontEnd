@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 
 class CommonLoaders{
 
-  static successSnackBar({
-    required title,
-    message = '',
-    duration = 3
+  static void successSnackBar({
+    required String title,
+    String message = '',
+    dynamic duration = 3
   }){
     Get.snackbar(
         title,
@@ -22,10 +22,10 @@ class CommonLoaders{
     );
   }
 
-  static errorSnackBar({
-    required title,
-    message = '',
-    duration = 3
+  static void errorSnackBar({
+    required String title,
+    String message = '',
+    dynamic duration = 3
   }){
     Get.snackbar(
         title,
@@ -41,10 +41,10 @@ class CommonLoaders{
     );
   }
 
-  static warningSnackBar({
-    required title,
-    message = '',
-    duration = 3
+  static void warningSnackBar({
+    required String title,
+    String message = '',
+    dynamic duration = 3
   }){
     Get.snackbar(
         title,
