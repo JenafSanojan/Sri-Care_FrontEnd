@@ -66,10 +66,10 @@ class _MainScreenState extends State<MainScreen> {
         child: PendingBillsScreen(
       dontShowBackButton: true,
     )),
-    Center(
-        child: BillingHistoryScreen(
-      dontShowBackButton: true,
-    )),
+    // Center(
+    //     child: BillingHistoryScreen(
+    //   dontShowBackButton: true,
+    // )),
     Center(
         child: SupportListScreen(
       dontShowBackButton: true,
@@ -95,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
     Center(child: ServicesScreen()),
     Center(child: PaymentScreen()),
     Center(child: PendingBillsScreen()),
-    Center(child: BillingHistoryScreen()),
+    // Center(child: BillingHistoryScreen()),
     Center(child: SupportListScreen()),
     Center(child: NotificationScreen()),
     Center(child: SettingsScreen()),
@@ -114,8 +114,13 @@ class _MainScreenState extends State<MainScreen> {
         drawerCallback: toggleDrawer,
         dontShowBackButton: true,
       )),
+      // Center(
+      //     child: BillingHistoryScreen(
+      //   drawerCallback: toggleDrawer,
+      //   dontShowBackButton: true,
+      // )),
       Center(
-          child: BillingHistoryScreen(
+          child: PaymentScreen(
         drawerCallback: toggleDrawer,
         dontShowBackButton: true,
       )),
@@ -134,7 +139,7 @@ class _MainScreenState extends State<MainScreen> {
     MenuItem(icon: Icons.miscellaneous_services, title: 'Services'),
     MenuItem(icon: Icons.payment, title: 'Reload/Pay'),
     MenuItem(icon: Icons.pending, title: 'Pending Bills'),
-    MenuItem(icon: Icons.gas_meter, title: 'Usage History'),
+    // MenuItem(icon: Icons.gas_meter, title: 'Usage History'),
     MenuItem(icon: Icons.support, title: 'Get Support'),
     MenuItem(icon: Icons.notifications, title: 'Notifications'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
@@ -144,7 +149,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<MenuItem> _mobMenuItems = [
     MenuItem(icon: Icons.home, title: 'Home'),
     MenuItem(icon: Icons.folder, title: 'Packages'),
-    MenuItem(icon: Icons.gas_meter, title: 'Usage'),
+    // MenuItem(icon: Icons.gas_meter, title: 'Usage'),
+    MenuItem(icon: Icons.payment, title: 'Reload/Pay'),
     MenuItem(icon: Icons.settings, title: 'Settings'),
   ];
 

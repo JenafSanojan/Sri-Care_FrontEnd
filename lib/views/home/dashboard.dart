@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:sri_tel_flutter_web_mob/Global/global_configs.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/billing_history_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/actions/notification_screen.dart';
+import 'package:sri_tel_flutter_web_mob/views/billing/pending_bills_screen.dart';
 import 'package:sri_tel_flutter_web_mob/views/profile/profile_screen.dart';
 import 'package:sri_tel_flutter_web_mob/widget_common/responsive-layout.dart';
+import 'package:sri_tel_flutter_web_mob/widget_common/snack_bar.dart';
+import '../../entities/packageBilling/bill.dart';
+import '../../services/billing_service.dart';
 import '../../utils/colors.dart';
 import '../../widget_common/special/bill_tile.dart';
 import '../../widget_common/special/circular_usage_indicator.dart';
 import 'package:get/get.dart';
+
+import '../billing/payment_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   final VoidCallback? drawerCallback;
@@ -17,17 +23,70 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ResponsiveLayout(
-      mobileBody: const MobileDashboard(),
-      webBody: const WebDashboard(),
+      mobileBody: MobileDashboard(),
+      webBody: WebDashboard(),
     );
   }
 }
 
 // --- MOBILE DASHBOARD ---
-class MobileDashboard extends StatelessWidget {
+class MobileDashboard extends StatefulWidget {
   final VoidCallback? openDrawer;
 
-  const MobileDashboard({super.key, this.openDrawer});
+  MobileDashboard({super.key, this.openDrawer});
+
+  @override
+  State<MobileDashboard> createState() => _MobileDashboardState();
+}
+
+class _MobileDashboardState extends State<MobileDashboard> {
+  final BillingService _billingService = BillingService();
+
+  List<Bill> _pendingBills = [];
+
+  bool _isBillsLoading = true;
+
+  double _totalOutstanding = 0.0;
+
+  Future<void> _fetchBills() async {
+    setState(() => _isBillsLoading = true);
+
+    final allBills = await _billingService.getUserBills();
+
+    if (mounted) {
+      if (allBills != null) {
+        // Filter for bills that are NOT paid
+        // Adjust status strings based on your actual API response (e.g., "PENDING", "Overdue")
+        final unpaid = allBills.where((bill) {
+          final status = bill.status.toUpperCase();
+          return status != 'PAID' && status != 'COMPLETED';
+        }).toList();
+
+        // Sort: Overdue/Oldest first
+        unpaid.sort((a, b) => (a.createdAt ?? DateTime.now())
+            .compareTo(b.createdAt ?? DateTime.now()));
+
+        setState(() {
+          _pendingBills = unpaid;
+          _totalOutstanding = unpaid.fold(0, (sum, item) => sum + item.amount);
+          _isBillsLoading = false;
+        });
+      } else {
+        setState(() => _isBillsLoading = false);
+      }
+    }
+  }
+
+  void _handlePayBill(Bill bill) {
+    Get.to(() => PaymentScreen(bill: bill));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchBills();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +100,8 @@ class MobileDashboard extends StatelessWidget {
         leading: IconButton(
             icon: const Icon(Icons.menu, color: white),
             onPressed: () => {
-                  openDrawer != null
-                      ? openDrawer!()
+                  widget.openDrawer != null
+                      ? widget.openDrawer!()
                       : Scaffold.of(context).openDrawer(),
                 }),
         actions: [
@@ -88,7 +147,8 @@ class MobileDashboard extends StatelessWidget {
                               style:
                                   const TextStyle(color: white, fontSize: 16)),
                           const SizedBox(height: 5),
-                          Text("${GlobalAuthConfigs.instance.user.mobileNumber}",
+                          Text(
+                              "${GlobalAuthConfigs.instance.user.mobileNumber}",
                               style: TextStyle(
                                   color: white,
                                   fontSize: 24,
@@ -174,7 +234,10 @@ class MobileDashboard extends StatelessWidget {
                               title: "Voice Usage",
                               value: "${GlobalAuthConfigs.instance.user.voice}",
                               unit: "Mins",
-                              percent: GlobalAuthConfigs.instance.user.voice == 0 ? 0.0 : 0.4),
+                              percent:
+                                  GlobalAuthConfigs.instance.user.voice == 0
+                                      ? 0.0
+                                      : 0.4),
                         ],
                       ),
                     ],
@@ -197,14 +260,27 @@ class MobileDashboard extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: textColorOne)),
                       TextButton(
-                          onPressed: () => Get.to(() => BillingHistoryScreen()),
+                          onPressed: () => Get.to(() => PendingBillsScreen()),
                           child: const Text("See All",
                               style: TextStyle(color: orangeColor))),
                     ],
                   ),
-                  buildBillTile("Jan 2026", "Paid", "LKR 1,250", true),
-                  buildBillTile("Dec 2025", "Overdue", "LKR 1,400", false),
-                  buildBillTile("Nov 2025", "Paid", "LKR 1,250", true),
+                  Container(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withValues(alpha: 0.05),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: _buildContent(isWeb: false)),
                 ],
               ),
             ),
@@ -214,11 +290,223 @@ class MobileDashboard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildContent({required bool isWeb}) {
+    return _isBillsLoading
+          ? const Center(child: CircularProgressIndicator(color: orangeColor))
+          : Expanded(
+              child: _pendingBills.isEmpty
+                  ? _buildEmptyState()
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      itemCount: _pendingBills.length,
+                      itemBuilder: (context, index) {
+                        return _buildBillCard(_pendingBills[index]);
+                      },
+                    ),
+            );
+  }
+
+  Widget _buildBillCard(Bill bill) {
+    bool isOverdue = bill.status.toUpperCase() == 'OVERDUE';
+    Color statusColor = isOverdue ? Colors.red : orangeColor;
+
+    // Formatting date (Using basic string splitting if intl not available, or simpler logic)
+    String dateStr = bill.createdAt != null
+        ? "${bill.createdAt!.year}-${bill.createdAt!.month.toString().padLeft(2, '0')}-${bill.createdAt!.day.toString().padLeft(2, '0')}"
+        : "Unknown Date";
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: isOverdue
+            ? Border.all(color: Colors.red.withValues(alpha: 0.3), width: 1)
+            : null,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Left: Month & ID
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    bill.billingMonth.toUpperCase(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: textColorOne),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Bill #${bill.id.substring(bill.id.length - 6)}",
+                    // Show last 6 chars of ID
+                    style: const TextStyle(color: greyColor, fontSize: 12),
+                  ),
+                ],
+              ),
+              // Right: Status Badge
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  bill.status.toUpperCase(),
+                  style: TextStyle(
+                      color: statusColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11),
+                ),
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: Divider(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // Amount Details
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Due Amount",
+                      style: TextStyle(fontSize: 12, color: greyColor)),
+                  const SizedBox(height: 5),
+                  Text(
+                    "LKR ${bill.amount.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: textColorOne),
+                  ),
+                  const SizedBox(height: 5),
+                  Text("Generated: $dateStr",
+                      style: const TextStyle(fontSize: 11, color: greyColor)),
+                ],
+              ),
+              // Pay Button
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: statusColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                  elevation: 2,
+                ),
+                onPressed: () => _handlePayBill(bill),
+                child: const Text("Pay Now",
+                    style:
+                        TextStyle(color: white, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: 400,
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+            SizedBox(height: 20),
+            Text("No Pending Payments!",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: textColorOne)),
+            SizedBox(height: 10),
+            Text("You are all caught up.", style: TextStyle(color: greyColor)),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 // --- WEB DASHBOARD ---
-class WebDashboard extends StatelessWidget {
-  const WebDashboard({super.key});
+class WebDashboard extends StatefulWidget {
+  WebDashboard({super.key});
+
+  @override
+  State<WebDashboard> createState() => _WebDashboardState();
+}
+
+class _WebDashboardState extends State<WebDashboard> {
+  final BillingService _billingService = BillingService();
+
+  List<Bill> _pendingBills = [];
+
+  bool _isBillsLoading = true;
+
+  double _totalOutstanding = 0.0;
+
+  Future<void> _fetchBills() async {
+    setState(() => _isBillsLoading = true);
+
+    final allBills = await _billingService.getUserBills();
+    // CommonLoaders.successSnackBar(title: "title");
+
+    if (mounted) {
+      if (allBills != null) {
+        // Filter for bills that are NOT paid
+        // Adjust status strings based on your actual API response (e.g., "PENDING", "Overdue")
+        final unpaid = allBills.where((bill) {
+          final status = bill.status.toUpperCase();
+          return status != 'PAID' && status != 'COMPLETED';
+        }).toList();
+
+        // Sort: Overdue/Oldest first
+        unpaid.sort((a, b) => (a.createdAt ?? DateTime.now())
+            .compareTo(b.createdAt ?? DateTime.now()));
+
+        setState(() {
+          _pendingBills = unpaid;
+          _totalOutstanding = unpaid.fold(0, (sum, item) => sum + item.amount);
+          _isBillsLoading = false;
+        });
+      } else {
+        setState(() => _isBillsLoading = false);
+      }
+    }
+  }
+
+  void _handlePayBill(Bill bill) {
+    Get.to(() => PaymentScreen(bill: bill));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _fetchBills();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +611,8 @@ class WebDashboard extends StatelessWidget {
                             height: 80,
                             width: 80),
                         const Spacer(),
-                        Text("Rs. ${GlobalAuthConfigs.instance.user.walletBalance}",
+                        Text(
+                            "Rs. ${GlobalAuthConfigs.instance.user.walletBalance}",
                             style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -349,11 +638,14 @@ class WebDashboard extends StatelessWidget {
                             title: "",
                             value: "${GlobalAuthConfigs.instance.user.voice}",
                             unit: "Mins",
-                            percent: GlobalAuthConfigs.instance.user.voice == 0 ? 0.0 : 0.4,
+                            percent: GlobalAuthConfigs.instance.user.voice == 0
+                                ? 0.0
+                                : 0.4,
                             width: 80,
                             height: 80),
                         const Spacer(),
-                        Text("${GlobalAuthConfigs.instance.user.voice} Mins Left",
+                        Text(
+                            "${GlobalAuthConfigs.instance.user.voice} Mins Left",
                             style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -390,19 +682,190 @@ class WebDashboard extends StatelessWidget {
                                   horizontal: 20, vertical: 15),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
-                          onPressed: () => Get.to(() => BillingHistoryScreen()),
+                          onPressed: () => Get.to(() => PendingBillsScreen()),
                           child: const Text("View All History",
                               style: TextStyle(color: white))),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  // List of bills using shared helper
-                  buildBillTile("Jan 2026", "Paid", "LKR 1,250", true),
-                  buildBillTile("Dec 2025", "Overdue", "LKR 1,400", false),
-                  buildBillTile("Nov 2025", "Paid", "LKR 1,250", true),
+                  // List of bills
+                  Container(
+                      margin: const EdgeInsets.only(top:50,bottom: 15),
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withValues(alpha: 0.05),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: _buildContent(isWeb: true)),
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent({required bool isWeb}) {
+    return _isBillsLoading
+        ? const Center(child: CircularProgressIndicator(color: orangeColor))
+        : Expanded(
+      child: _pendingBills.isEmpty
+          ? _buildEmptyState()
+          : ListView.builder(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 20, vertical: 10),
+        itemCount: _pendingBills.length,
+        itemBuilder: (context, index) {
+          return _buildBillCard(_pendingBills[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBillCard(Bill bill) {
+    bool isOverdue = bill.status.toUpperCase() == 'OVERDUE';
+    Color statusColor = isOverdue ? Colors.red : orangeColor;
+
+    // Formatting date (Using basic string splitting if intl not available, or simpler logic)
+    String dateStr = bill.createdAt != null
+        ? "${bill.createdAt!.year}-${bill.createdAt!.month.toString().padLeft(2, '0')}-${bill.createdAt!.day.toString().padLeft(2, '0')}"
+        : "Unknown Date";
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: isOverdue
+            ? Border.all(color: Colors.red.withValues(alpha: 0.3), width: 1)
+            : null,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Left: Month & ID
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    bill.billingMonth.toUpperCase(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: textColorOne),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Bill #${bill.id.substring(bill.id.length - 6)}",
+                    // Show last 6 chars of ID
+                    style: const TextStyle(color: greyColor, fontSize: 12),
+                  ),
+                ],
+              ),
+              // Right: Status Badge
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  bill.status.toUpperCase(),
+                  style: TextStyle(
+                      color: statusColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 11),
+                ),
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: Divider(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // Amount Details
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Due Amount",
+                      style: TextStyle(fontSize: 12, color: greyColor)),
+                  const SizedBox(height: 5),
+                  Text(
+                    "LKR ${bill.amount.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: textColorOne),
+                  ),
+                  const SizedBox(height: 5),
+                  Text("Generated: $dateStr",
+                      style: const TextStyle(fontSize: 11, color: greyColor)),
+                ],
+              ),
+              // Pay Button
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: statusColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+                  elevation: 2,
+                ),
+                onPressed: () => _handlePayBill(bill),
+                child: const Text("Pay Now",
+                    style:
+                        TextStyle(color: white, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Container(
+        height: 400,
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+            SizedBox(height: 20),
+            Text("No Pending Payments!",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: textColorOne)),
+            SizedBox(height: 10),
+            Text("You are all caught up.", style: TextStyle(color: greyColor)),
           ],
         ),
       ),
